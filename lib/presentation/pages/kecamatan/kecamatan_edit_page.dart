@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../../common/constants.dart';
-// import '../../common/constants.dart';
 
-class DesaCreatePage extends StatelessWidget {
-  DesaCreatePage({Key? key}) : super(key: key);
+class KecamatanEditPage extends StatelessWidget {
+  KecamatanEditPage({Key? key}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
-          'Create Desa',
+          'Edit Kecamatan',
           style: GoogleFonts.inter(
             color: hitamColor,
             fontSize: 22,
@@ -155,47 +155,7 @@ class DesaCreatePage extends StatelessWidget {
                     },
                   ),
                   SizedBox(
-                    height: 14,
-                  ),
-                  Text(
-                    'Nama Desa',
-                    style: TextStyle(color: abuAbuColor),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  TextFormField(
-                    // controller: _namaController,
-                    decoration: InputDecoration(
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(width: 1, color: abuAbuColor),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(4),
-                        // borderSide: BorderSide.none,
-                      ),
-                      fillColor: softBlueColor,
-                      filled: true,
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      hintText: "ex: Pecatu",
-                      hintStyle: TextStyle(
-                        color: placeholderColor,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    style: kSubtitle,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Masukan Nama Desa dengan benar";
-                      }
-                      return null;
-                    },
-                  ),
-                  SizedBox(
-                    height: 104,
+                    height: 224,
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,

@@ -1,28 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:sicatu_app/presentation/pages/desa_create_page.dart';
-// import 'package:sicatu_app/presentation/pages/desa_detail_page.dart';
-import 'package:sicatu_app/presentation/pages/desa_page/desa_create_page.dart';
-import 'package:sicatu_app/presentation/pages/desa_page/desa_detail_page.dart';
+import 'package:sicatu_app/presentation/pages/kecamatan/kecamatan_create_page.dart';
+import 'package:sicatu_app/presentation/pages/kecamatan/kecamatan_detail_page.dart';
 
 import '../../../common/constants.dart';
-// import '../../common/constants.dart';
-import '../../widgets/navigation_drawer.dart';
-// import '../widgets/navigation_drawer.dart';
 
-class DesaViewPage extends StatelessWidget {
-  const DesaViewPage({Key? key}) : super(key: key);
+class KecamatanViewPage extends StatelessWidget {
+  const KecamatanViewPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // final int gridCount;
-
     return Scaffold(
       extendBodyBehindAppBar: true,
-      // drawer: NavigationDrawer(),
       appBar: AppBar(
         title: Text(
-          'Desa',
+          'Kecamatan',
           style: GoogleFonts.inter(
             color: hitamColor,
             fontSize: 22,
@@ -50,7 +42,7 @@ class DesaViewPage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return DesaCreatePage();
+                return KecamatanCreatePage();
               },
             ),
           );
@@ -69,10 +61,9 @@ class DesaViewPage extends StatelessWidget {
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 10,
                 children: <Widget>[
-                  CardDesa(desa: 'Pecatu'),
-                  CardDesa(desa: 'Mengwitani'),
-                  CardDesa(desa: 'Sesetan'),
-                  CardDesa(desa: 'Panjer'),
+                  CardKecamatan(kecamatan: 'Denpasar Selatan'),
+                  CardKecamatan(kecamatan: 'Mengwitani'),
+                  CardKecamatan(kecamatan: 'Kuta Selatan'),
                 ],
               ),
             ],
@@ -83,15 +74,15 @@ class DesaViewPage extends StatelessWidget {
   }
 }
 
-class CardDesa extends StatelessWidget {
-  // const CardDesa({
+class CardKecamatan extends StatelessWidget {
+  // const CardKecamatan({
   //   Key? key,
   // }) : super(key: key);
 
-  String desa;
+  String kecamatan;
 
-  CardDesa({
-    required this.desa,
+  CardKecamatan({
+    required this.kecamatan,
   });
 
   @override
@@ -102,7 +93,7 @@ class CardDesa extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return DesaDetailPage();
+              return KecamatanDetailPage();
             },
           ),
         );
@@ -117,9 +108,11 @@ class CardDesa extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Text(
-                  desa,
-                  style: ktittle,
+                Expanded(
+                  child: Text(
+                    kecamatan,
+                    style: ktittle,
+                  ),
                 ),
               ],
             ),

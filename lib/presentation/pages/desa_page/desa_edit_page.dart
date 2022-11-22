@@ -39,6 +39,126 @@ class DesaEditPage extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Text(
+                    'Provinsi',
+                    style: TextStyle(color: abuAbuColor),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  TextFormField(
+                    // controller: _namaController,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 1, color: abuAbuColor),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        // borderSide: BorderSide.none,
+                      ),
+                      fillColor: softBlueColor,
+                      filled: true,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      hintText: "ex: Bali",
+                      hintStyle: TextStyle(
+                        color: placeholderColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    style: kSubtitle,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Masukan Provinsi dengan benar";
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 14,
+                  ),
+                  Text(
+                    'Kabupaten/Kota',
+                    style: TextStyle(color: abuAbuColor),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  TextFormField(
+                    // controller: _namaController,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 1, color: abuAbuColor),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        // borderSide: BorderSide.none,
+                      ),
+                      fillColor: softBlueColor,
+                      filled: true,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      hintText: "ex: Badung",
+                      hintStyle: TextStyle(
+                        color: placeholderColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    style: kSubtitle,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Masukan Kabupaten/Kota dengan benar";
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 14,
+                  ),
+                  Text(
+                    'Nama Kecamatan',
+                    style: TextStyle(color: abuAbuColor),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  TextFormField(
+                    // controller: _namaController,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(width: 1, color: abuAbuColor),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(4),
+                        // borderSide: BorderSide.none,
+                      ),
+                      fillColor: softBlueColor,
+                      filled: true,
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      hintText: "ex: Kuta Selatan",
+                      hintStyle: TextStyle(
+                        color: placeholderColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    style: kSubtitle,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Masukan Nama Kecamatan dengan benar";
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 14,
+                  ),
+                  Text(
                     'Nama Desa',
                     style: TextStyle(color: abuAbuColor),
                   ),
@@ -76,7 +196,7 @@ class DesaEditPage extends StatelessWidget {
                     },
                   ),
                   SizedBox(
-                    height: 384,
+                    height: 104,
                   ),
                   SizedBox(
                     width: MediaQuery.of(context).size.width,

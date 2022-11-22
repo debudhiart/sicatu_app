@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:sicatu_app/presentation/pages/desa_edit_page.dart';
-import 'package:sicatu_app/presentation/pages/desa_page/desa_edit_page.dart';
+import 'package:sicatu_app/presentation/pages/kecamatan/kecamatan_edit_page.dart';
 
 import '../../../common/constants.dart';
-// import '../../common/constants.dart';
 
-class DesaDetailPage extends StatelessWidget {
-  const DesaDetailPage({Key? key}) : super(key: key);
+class KecamatanDetailPage extends StatelessWidget {
+  const KecamatanDetailPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +13,7 @@ class DesaDetailPage extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
-          'Detail Desa',
+          'Detail Kecamatan',
           style: GoogleFonts.inter(
             color: hitamColor,
             fontSize: 22,
@@ -43,11 +41,11 @@ class DesaDetailPage extends StatelessWidget {
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: Text(
-                    'Hapus Desa',
+                    'Hapus Kecamatan',
                     style: kalerttittle,
                   ),
                   content: Text(
-                    'Yakin ingin hapus desa ini?',
+                    'Yakin ingin hapus Kecamatan ini?',
                     style: kdescription14hitam,
                   ),
                   actions: <Widget>[
@@ -90,7 +88,7 @@ class DesaDetailPage extends StatelessWidget {
                   width: 10,
                 ),
                 Text(
-                  "Delete Desa",
+                  "Delete Kecamatan",
                   style: TextStyle(
                       color: Colors.white,
                       decoration: TextDecoration.underline),
@@ -132,7 +130,7 @@ class DesaDetailPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              'Pecatu',
+                              'Kuta Selatan',
                               style: kHeading5Putih,
                             ),
                             IconButton(
@@ -141,7 +139,7 @@ class DesaDetailPage extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) {
-                                      return DesaEditPage();
+                                      return KecamatanEditPage();
                                     },
                                   ),
                                 );
@@ -157,13 +155,6 @@ class DesaDetailPage extends StatelessWidget {
                       ),
                       SizedBox(
                         height: 9,
-                      ),
-                      Text(
-                        "Kuta Selatan",
-                        style: kBodyText,
-                      ),
-                      SizedBox(
-                        height: 10,
                       ),
                       Text(
                         "Badung",

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:sicatu_app/presentation/pages/desa_edit_page.dart';
-import 'package:sicatu_app/presentation/pages/desa_page/desa_edit_page.dart';
+import 'package:sicatu_app/presentation/pages/provinsi_page/provinsi_edit_page.dart';
 
 import '../../../common/constants.dart';
-// import '../../common/constants.dart';
+import '../../widgets/navigation_drawer.dart';
 
-class DesaDetailPage extends StatelessWidget {
-  const DesaDetailPage({Key? key}) : super(key: key);
+class ProvinsiDetailPage extends StatelessWidget {
+  const ProvinsiDetailPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +14,7 @@ class DesaDetailPage extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
-          'Detail Desa',
+          'Detail Provinsi',
           style: GoogleFonts.inter(
             color: hitamColor,
             fontSize: 22,
@@ -43,11 +42,11 @@ class DesaDetailPage extends StatelessWidget {
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: Text(
-                    'Hapus Desa',
+                    'Hapus Provinsi',
                     style: kalerttittle,
                   ),
                   content: Text(
-                    'Yakin ingin hapus desa ini?',
+                    'Yakin ingin hapus provinsi ini?',
                     style: kdescription14hitam,
                   ),
                   actions: <Widget>[
@@ -90,7 +89,7 @@ class DesaDetailPage extends StatelessWidget {
                   width: 10,
                 ),
                 Text(
-                  "Delete Desa",
+                  "Delete Provinsi",
                   style: TextStyle(
                       color: Colors.white,
                       decoration: TextDecoration.underline),
@@ -122,7 +121,6 @@ class DesaDetailPage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 16.0, left: 16.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.only(
@@ -132,7 +130,7 @@ class DesaDetailPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              'Pecatu',
+                              'Bali',
                               style: kHeading5Putih,
                             ),
                             IconButton(
@@ -141,7 +139,7 @@ class DesaDetailPage extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) {
-                                      return DesaEditPage();
+                                      return ProvinsiEditPage();
                                     },
                                   ),
                                 );
@@ -154,27 +152,6 @@ class DesaDetailPage extends StatelessWidget {
                             ),
                           ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 9,
-                      ),
-                      Text(
-                        "Kuta Selatan",
-                        style: kBodyText,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "Badung",
-                        style: kBodyText,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "Bali",
-                        style: kBodyText,
                       ),
                     ],
                   ),

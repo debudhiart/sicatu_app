@@ -1,28 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:sicatu_app/presentation/pages/desa_create_page.dart';
-// import 'package:sicatu_app/presentation/pages/desa_detail_page.dart';
-import 'package:sicatu_app/presentation/pages/desa_page/desa_create_page.dart';
-import 'package:sicatu_app/presentation/pages/desa_page/desa_detail_page.dart';
+import 'package:sicatu_app/presentation/pages/provinsi_page/provinsi_create_page.dart';
+import 'package:sicatu_app/presentation/pages/provinsi_page/provinsi_detail_page.dart';
 
 import '../../../common/constants.dart';
-// import '../../common/constants.dart';
 import '../../widgets/navigation_drawer.dart';
-// import '../widgets/navigation_drawer.dart';
 
-class DesaViewPage extends StatelessWidget {
-  const DesaViewPage({Key? key}) : super(key: key);
+class ProvinsiViewPage extends StatelessWidget {
+  const ProvinsiViewPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // final int gridCount;
-
     return Scaffold(
       extendBodyBehindAppBar: true,
-      // drawer: NavigationDrawer(),
       appBar: AppBar(
         title: Text(
-          'Desa',
+          'Provinsi',
           style: GoogleFonts.inter(
             color: hitamColor,
             fontSize: 22,
@@ -50,7 +43,7 @@ class DesaViewPage extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return DesaCreatePage();
+                return ProvinsiCreatePage();
               },
             ),
           );
@@ -69,10 +62,10 @@ class DesaViewPage extends StatelessWidget {
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 10,
                 children: <Widget>[
-                  CardDesa(desa: 'Pecatu'),
-                  CardDesa(desa: 'Mengwitani'),
-                  CardDesa(desa: 'Sesetan'),
-                  CardDesa(desa: 'Panjer'),
+                  CardProvinsi(provinsi: 'Bali'),
+                  CardProvinsi(provinsi: 'Jawa Timur'),
+                  CardProvinsi(provinsi: 'Jawa Barat'),
+                  CardProvinsi(provinsi: 'Jawa Tengah'),
                 ],
               ),
             ],
@@ -83,15 +76,15 @@ class DesaViewPage extends StatelessWidget {
   }
 }
 
-class CardDesa extends StatelessWidget {
-  // const CardDesa({
+class CardProvinsi extends StatelessWidget {
+  // const CardProvinsi({
   //   Key? key,
   // }) : super(key: key);
 
-  String desa;
+  String provinsi;
 
-  CardDesa({
-    required this.desa,
+  CardProvinsi({
+    required this.provinsi,
   });
 
   @override
@@ -102,7 +95,7 @@ class CardDesa extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return DesaDetailPage();
+              return ProvinsiDetailPage();
             },
           ),
         );
@@ -118,7 +111,7 @@ class CardDesa extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  desa,
+                  provinsi,
                   style: ktittle,
                 ),
               ],

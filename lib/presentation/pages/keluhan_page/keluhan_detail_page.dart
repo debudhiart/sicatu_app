@@ -183,14 +183,14 @@ class KeluhanDetailPage extends StatelessWidget {
                           children: <Widget>[
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return KeluhanMapsRumahPelangganPage();
-                                    },
-                                  ),
-                                );
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) {
+                                //       return KeluhanMapsRumahPelangganPage();
+                                //     },
+                                //   ),
+                                // );
                               },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -223,14 +223,14 @@ class KeluhanDetailPage extends StatelessWidget {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return KeluhanMapsLokasiPenjemputanPage();
-                                    },
-                                  ),
-                                );
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //     builder: (context) {
+                                //       return KeluhanMapsLokasiPenjemputanPage();
+                                //     },
+                                //   ),
+                                // );
                               },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,14 +282,14 @@ class KeluhanDetailPage extends StatelessWidget {
                               minimumSize: Size(318, 44),
                             ),
                             onPressed: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) {
-                              //       return UserMapsPage();
-                              //     },
-                              //   ),
-                              // );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return KeluhanMapsRumahPelangganPage();
+                                  },
+                                ),
+                              );
                             },
                             child: Text("Lihat Lokasi Rumah Pelanggan"),
                           ),
@@ -313,14 +313,14 @@ class KeluhanDetailPage extends StatelessWidget {
                               minimumSize: Size(318, 44),
                             ),
                             onPressed: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) {
-                              //       return UserMapsPage();
-                              //     },
-                              //   ),
-                              // );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return KeluhanMapsLokasiPenjemputanPage();
+                                  },
+                                ),
+                              );
                             },
                             child: Text("Lihat Lokasi Penjemputan Sampah"),
                           ),

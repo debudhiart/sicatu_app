@@ -10,6 +10,7 @@ import 'package:sicatu_app/presentation/pages/dashboard_page.dart';
 import 'package:sicatu_app/presentation/pages/profile_page.dart';
 // import 'package:sicatu_app/presentation/pages/shift_view_page.dart';
 import 'package:sicatu_app/presentation/pages/template/template_page.dart';
+import 'package:sicatu_app/presentation/pages/wilayah_page.dart';
 // import 'package:sicatu_app/presentation/pages/user_view_page.dart';
 
 // import '../pages/desa_view_page.dart';
@@ -90,8 +91,8 @@ class NavigationDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.villa),
-              title: Text('Desa'),
+              leading: Icon(Icons.map),
+              title: Text('Wilayah'),
               onTap: () {
                 // Navigator.pop(context);
                 // Navigator.pushNamed(context, ListWatchlistPage.ROUTE_NAME);
@@ -99,7 +100,7 @@ class NavigationDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return DesaViewPage();
+                      return WilayahPage();
                     },
                   ),
                 );
