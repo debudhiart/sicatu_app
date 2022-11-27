@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sicatu_app/data/datasources/models/User.dart';
 // import 'package:sicatu_app/presentation/pages/user_edit_profile_page.dart';
 // import 'package:sicatu_app/presentation/pages/user_maps_page.dart';
 import 'package:sicatu_app/presentation/pages/user_page/user_edit_profile_page.dart';
@@ -11,7 +12,7 @@ import '../../../common/constants.dart';
 class UserDetailPage extends StatelessWidget {
   // UserDetailPage({Key? key}) : super(key: key);
 
-  final Map users;
+  User users;
 
   UserDetailPage({required this.users});
 
@@ -96,47 +97,47 @@ class UserDetailPage extends StatelessWidget {
                       height: 33,
                     ),
                     Text(
-                      users['nama'],
+                      users.nama,
                       style: kHeading5,
                     ),
                     SizedBox(
                       height: 9,
                     ),
                     Text(
-                      "Panjer",
+                      users.desa?.nama_desa ?? "Desa",
                       style: kBodyText,
                     ),
                     SizedBox(
                       height: 9,
                     ),
                     Text(
-                      users['email'],
+                      users.email,
                       style: kBodyText,
                     ),
                     SizedBox(
                       height: 9,
                     ),
                     Text(
-                      users['address'],
+                      users.address,
                       style: kBodyText,
                     ),
                     SizedBox(
                       height: 9,
                     ),
                     Text(
-                      "Super Admin",
+                      users.role?.nama_role ?? "Role",
                       style: kBodyText,
                     ),
                     SizedBox(
                       height: 9,
                     ),
-                    Text(
-                      "085536553596",
-                      style: kBodyText,
-                    ),
-                    SizedBox(
-                      height: 9,
-                    ),
+                    // Text(
+                    //   "085536553596",
+                    //   style: kBodyText,
+                    // ),
+                    // SizedBox(
+                    //   height: 9,
+                    // ),
                     Text(
                       "Lokasi Rumah",
                       style: kBodyText,

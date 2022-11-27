@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sicatu_app/data/datasources/models/Provinsi.dart';
 import 'package:sicatu_app/presentation/pages/provinsi_page/provinsi_edit_page.dart';
 
 import '../../../common/constants.dart';
 import '../../widgets/navigation_drawer.dart';
 
 class ProvinsiDetailPage extends StatelessWidget {
-  const ProvinsiDetailPage({Key? key}) : super(key: key);
+  //  ProvinsiDetailPage({Key? key}), required this.provinsi : super(key: key);
+  final int provinsi_id;
+  ProvinsiDetailPage({required this.provinsi_id});
 
   @override
   Widget build(BuildContext context) {

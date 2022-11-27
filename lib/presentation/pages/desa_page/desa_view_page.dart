@@ -69,10 +69,19 @@ class DesaViewPage extends StatelessWidget {
                 crossAxisSpacing: 12,
                 mainAxisSpacing: 10,
                 children: <Widget>[
-                  CardDesa(desa: 'Pecatu'),
-                  CardDesa(desa: 'Mengwitani'),
-                  CardDesa(desa: 'Sesetan'),
-                  CardDesa(desa: 'Panjer'),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return DesaDetailPage();
+                          },
+                        ),
+                      );
+                    },
+                    child: CardDesa(desa: 'Pecatu'),
+                  ),
                 ],
               ),
             ],
@@ -96,33 +105,21 @@ class CardDesa extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return DesaDetailPage();
-            },
-          ),
-        );
-      },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(4),
-        child: Card(
-          color: softBlueColor,
-          elevation: 3,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  desa,
-                  style: ktittle,
-                ),
-              ],
-            ),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(4),
+      child: Card(
+        color: softBlueColor,
+        elevation: 3,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                desa,
+                style: ktittle,
+              ),
+            ],
           ),
         ),
       ),

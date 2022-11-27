@@ -5,7 +5,10 @@ import 'package:sicatu_app/presentation/pages/kabupaten_kota/kabupaten_kota_edit
 import '../../../common/constants.dart';
 
 class KabupatenKotaDetailPage extends StatelessWidget {
-  const KabupatenKotaDetailPage({Key? key}) : super(key: key);
+  // const KabupatenKotaDetailPage({Key? key}) : super(key: key);
+
+  final int kabupaten_kota_id;
+  KabupatenKotaDetailPage({required this.kabupaten_kota_id});
 
   @override
   Widget build(BuildContext context) {
