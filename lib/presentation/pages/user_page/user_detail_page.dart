@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sicatu_app/data/datasources/models/User.dart';
+import 'package:sicatu_app/data/datasources/models/user.dart';
 // import 'package:sicatu_app/presentation/pages/user_edit_profile_page.dart';
 // import 'package:sicatu_app/presentation/pages/user_maps_page.dart';
 import 'package:sicatu_app/presentation/pages/user_page/user_edit_profile_page.dart';

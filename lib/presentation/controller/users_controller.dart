@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 // import 'dart:math';
 
-import 'package:sicatu_app/data/datasources/models/User.dart';
+import 'package:sicatu_app/data/datasources/models/user.dart';
 
 import '../service/user_service.dart';
 

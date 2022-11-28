@@ -1,4 +1,4 @@
-import 'package:sicatu_app/data/datasources/models/Kecamatan.dart';
+import 'package:sicatu_app/data/datasources/models/kecamatan.dart';
 
 class Desa {
   Desa({

@@ -1,10 +1,11 @@
 import 'package:get/get.dart';
-import 'package:sicatu_app/data/datasources/models/Provinsi.dart';
+import 'package:sicatu_app/data/datasources/models/provinsi.dart';
 
 import '../service/provinsi_service.dart';
 
 class ProvinsiController extends GetxController {
   List<Provinsi>? listProvinsi;
+  Provinsi? detailProvinsi;
   RxBool isLoading = false.obs;
 
   final service = Get.put(ProvinsiService());
@@ -12,6 +13,7 @@ class ProvinsiController extends GetxController {
   void onInit() async {
     super.onInit();
     await getProvinsi();
+    // await getDetailProvinsi(id);
     print(listProvinsi);
   }
 
@@ -20,5 +22,13 @@ class ProvinsiController extends GetxController {
     listProvinsi = await service.getProvinsiService();
     isLoading.value = false;
     return listProvinsi;
+  }
+
+  Future<Provinsi?> getDetailProvinsi(int id) async {
+    isLoading.value = true;
+    detailProvinsi = await service.getDetailProvinsiService(id);
+    isLoading.value = false;
+    print(detailProvinsi);
+    return detailProvinsi;
   }
 }

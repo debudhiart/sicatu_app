@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sicatu_app/data/datasources/models/KabupatenKota.dart';
+import 'package:sicatu_app/data/datasources/models/kabupaten_kota.dart';
 import 'package:sicatu_app/presentation/service/kabupaten_kota_service.dart';
 
 class KabupatenKotaController extends GetxController {

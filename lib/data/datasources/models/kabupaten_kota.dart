@@ -1,4 +1,4 @@
-import 'package:sicatu_app/data/datasources/models/Provinsi.dart';
+import 'package:sicatu_app/data/datasources/models/provinsi.dart';
 
 class KabupatenKota {
   KabupatenKota({

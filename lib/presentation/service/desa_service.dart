@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../../data/datasources/models/Desa.dart';
+import '../../data/datasources/models/desa.dart';
 
 class DesaService {
   final String url = 'http://192.168.106.1:8000/api/desa';

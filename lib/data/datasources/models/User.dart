@@ -1,5 +1,5 @@
-import 'package:sicatu_app/data/datasources/models/Desa.dart';
-import 'package:sicatu_app/data/datasources/models/Role.dart';
+import 'package:sicatu_app/data/datasources/models/desa.dart';
+import 'package:sicatu_app/data/datasources/models/role.dart';
 
 class User {
   User({

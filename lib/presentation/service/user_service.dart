@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import '../../data/datasources/models/User.dart';
+import '../../data/datasources/models/user.dart';
 
 class UserService {
   final String url = 'http://192.168.106.1:8000/api/user';

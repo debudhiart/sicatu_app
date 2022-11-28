@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 // import 'package:sicatu_app/presentation/pages/desa_create_page.dart';
 // import 'package:sicatu_app/presentation/pages/desa_detail_page.dart';
@@ -7,11 +8,21 @@ import 'package:sicatu_app/presentation/pages/desa_page/desa_detail_page.dart';
 
 import '../../../common/constants.dart';
 // import '../../common/constants.dart';
+import '../../controller/desa_controller.dart';
+import '../../service/desa_service.dart';
 import '../../widgets/navigation_drawer.dart';
+import '../../widgets/search_loading.dart';
 // import '../widgets/navigation_drawer.dart';
 
 class DesaViewPage extends StatelessWidget {
-  const DesaViewPage({Key? key}) : super(key: key);
+  // const DesaViewPage({Key? key}) : super(key: key);
+
+  final controller = Get.put(DesaController());
+  final service = Get.put(DesaService());
+
+  Future<void> _pullRefresh() async {
+    controller.getDesa();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,32 +70,49 @@ class DesaViewPage extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: <Widget>[
-              GridView.count(
-                physics: NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                crossAxisCount: 2,
-                childAspectRatio: 3 / 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 10,
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return DesaDetailPage();
-                          },
-                        ),
-                      );
-                    },
-                    child: CardDesa(desa: 'Pecatu'),
-                  ),
-                ],
-              ),
-            ],
+          child: RefreshIndicator(
+            onRefresh: _pullRefresh,
+            color: biruColor,
+            child: Obx(
+              () => controller.isLoading.value
+                  ? Center(
+                      child: SearchLoading(
+                        title: 'Loading Get Data Kabupaten Kota',
+                        subtitle: '',
+                      ),
+                      // CircularProgressIndicator(),
+                    )
+                  : ListView.builder(
+                      itemCount: controller.listDesa?.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GridView.count(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          crossAxisCount: 2,
+                          childAspectRatio: 3 / 2,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 10,
+                          children: <Widget>[
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return DesaDetailPage();
+                                    },
+                                  ),
+                                );
+                              },
+                              child: CardDesa(
+                                  desa: controller.listDesa?[index].nama_desa ??
+                                      "Nama Desa"),
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+            ),
           ),
         ),
       ),

@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 
-import '../../data/datasources/models/Desa.dart';
+import '../../data/datasources/models/desa.dart';
 import '../service/desa_service.dart';
 
 class DesaController extends GetxController {

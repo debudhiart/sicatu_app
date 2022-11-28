@@ -5,9 +5,9 @@ class Provinsi {
     this.created_at,
     this.updated_at,
   });
-  int provinsi_id;
+  int? provinsi_id;
 
-  String nama_provinsi;
+  String? nama_provinsi;
   String? created_at;
   String? updated_at;
 

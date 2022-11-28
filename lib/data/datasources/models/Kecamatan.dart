@@ -1,4 +1,4 @@
-import 'package:sicatu_app/data/datasources/models/KabupatenKota.dart';
+import 'package:sicatu_app/data/datasources/models/kabupaten_kota.dart';
 
 class Kecamatan {
   Kecamatan({

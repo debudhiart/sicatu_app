@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:sicatu_app/data/datasources/models/Kecamatan.dart';
+import 'package:sicatu_app/data/datasources/models/kecamatan.dart';
 
 import '../service/kecamatan_service.dart';
 
