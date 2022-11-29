@@ -75,7 +75,7 @@ class JadwalPelangganViewPage extends StatelessWidget {
               () => controller.isLoading.value
                   ? Center(
                       child: SearchLoading(
-                        title: 'Loading Get Data Provinsi',
+                        title: 'Loading Get Data Jadwal Pelanggan',
                         subtitle: '',
                       ),
                       // CircularProgressIndicator(),

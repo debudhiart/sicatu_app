@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sicatu_app/presentation/pages/jenis_langganan/jenis_langganan_create_page.dart';
 import 'package:sicatu_app/presentation/pages/jenis_langganan/jenis_langganan_detail_page.dart';
@@ -6,12 +7,21 @@ import 'package:sicatu_app/presentation/pages/jenis_langganan/jenis_langganan_de
 // import 'package:sicatu_app/presentation/pages/jenis_langganan_detail_page.dart';
 
 import '../../../common/constants.dart';
+import '../../controller/jenis_langganan_controller.dart';
+import '../../service/jenis_langganan_service.dart';
 import '../../widgets/navigation_drawer.dart';
+import '../../widgets/search_loading.dart';
 // import '../../common/constants.dart';
 // import '../widgets/navigation_drawer.dart';
 
 class JenisLanggananViewPage extends StatelessWidget {
-  const JenisLanggananViewPage({Key? key}) : super(key: key);
+  // const JenisLanggananViewPage({Key? key}) : super(key: key);
+  final controller = Get.put(JenisLanggananController());
+  final service = Get.put(JenisLanggananService());
+
+  Future<void> _pullRefresh() async {
+    controller.getJenisLangganan();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,30 +65,46 @@ class JenisLanggananViewPage extends StatelessWidget {
         },
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return JenisLanggananDetailPage();
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: RefreshIndicator(
+            onRefresh: _pullRefresh,
+            color: biruColor,
+            child: Obx(() => controller.isLoading.value
+                ? Center(
+                    child: SearchLoading(
+                      title: 'Loading Get Data Jenis Langganan',
+                      subtitle: '',
+                    ),
+                    // CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    itemCount: controller.listJenisLangganan?.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return JenisLanggananDetailPage();
+                              },
+                            ),
+                          );
                         },
-                      ),
-                    );
-                  },
-                  child: CardJenisLangganan(
-                      nama_jenis_layanan: 'Reguler',
-                      desa: 'Pecatu',
-                      harga: 'Rp.10.000'),
-                ),
-              ],
-            ),
+                        child: CardJenisLangganan(
+                          nama_jenis_layanan: controller
+                                  .listJenisLangganan?[index]
+                                  .nama_jenis_langganan ??
+                              "Jenis Langganan",
+                          desa: controller
+                                  .listJenisLangganan?[index].desa?.nama_desa ??
+                              "Desa",
+                          harga: controller.listJenisLangganan![index].harga,
+                        ),
+                      );
+                    },
+                  )),
           ),
         ),
       ),
@@ -93,7 +119,7 @@ class CardJenisLangganan extends StatelessWidget {
 
   String nama_jenis_layanan;
   String desa;
-  String harga;
+  int harga;
 
   CardJenisLangganan({
     required this.nama_jenis_layanan,
@@ -137,7 +163,7 @@ class CardJenisLangganan extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    harga,
+                    'Rp $harga',
                     style: kdescription,
                   ),
                 ],

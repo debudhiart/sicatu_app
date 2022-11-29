@@ -20,7 +20,7 @@ class JenisLangganan {
 
   factory JenisLangganan.fromJson(Map<String, dynamic> json) => JenisLangganan(
         jenis_langganan_id: json["jenis_langganan_id"],
-        desa_id: json["kabupaten_kota_id"],
+        desa_id: json["desa_id"],
         nama_jenis_langganan: json["nama_jenis_langganan"],
         harga: json["harga"],
         created_at: json["created_at"],
