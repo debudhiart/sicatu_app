@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:sicatu_app/data/datasources/models/detail_user.dart';
 import '../../data/datasources/models/user.dart';
 
 class UserService {
@@ -12,5 +13,12 @@ class UserService {
     var data = json.decode(response.body);
 
     return List<User>.from(data["data"].map((x) => User.fromJson(x)));
+  }
+
+  Future<UserDetail> getDetailUserService(int id) async {
+    var response = await http.get(Uri.parse('$url/$id'));
+    var data = json.decode(response.body);
+
+    return UserDetail.fromJson(data["data"]);
   }
 }

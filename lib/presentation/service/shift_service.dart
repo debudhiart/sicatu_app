@@ -11,4 +11,11 @@ class ShiftService {
 
     return List<Shift>.from(data["data"].map((x) => Shift.fromJson(x)));
   }
+
+  Future<Shift> getDetailShiftService(int id) async {
+    var response = await http.get(Uri.parse('$url/$id'));
+    var data = json.decode(response.body);
+
+    return Shift.fromJson(data['data']);
+  }
 }

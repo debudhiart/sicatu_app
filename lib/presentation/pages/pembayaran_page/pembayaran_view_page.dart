@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sicatu_app/common/constants.dart';
 // import 'package:sicatu_app/presentation/pages/pembayaran_create_page.dart';
@@ -7,11 +8,20 @@ import 'package:sicatu_app/presentation/pages/pembayaran_page/pembayaran_create_
 import 'package:sicatu_app/presentation/pages/pembayaran_page/pembayaran_detail_page.dart';
 
 // import '../../common/constants.dart';
+import '../../controller/bayar_controller.dart';
+import '../../service/bayar_service.dart';
 import '../../widgets/navigation_drawer.dart';
+import '../../widgets/search_loading.dart';
 // import '../widgets/navigation_drawer.dart';
 
 class PembayaranViewPage extends StatelessWidget {
-  const PembayaranViewPage({Key? key}) : super(key: key);
+  // const PembayaranViewPage({Key? key}) : super(key: key);
+  final controller = Get.put(BayarController());
+  final service = Get.put(BayarService());
+
+  Future<void> _pullRefresh() async {
+    controller.getBayar();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,19 +65,34 @@ class PembayaranViewPage extends StatelessWidget {
         },
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                CardPembayaran(
-                  nama: 'Budhi Arta K Giri',
-                  desa: 'Pecatu',
-                  harga: 'Rp. 10.000',
-                ),
-              ],
-            ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: RefreshIndicator(
+            onRefresh: _pullRefresh,
+            color: biruColor,
+            child: Obx(() => controller.isLoading.value
+                ? Center(
+                    child: SearchLoading(
+                      title: 'Loading Get Data Pembayaran',
+                      subtitle: '',
+                    ),
+                    // CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    itemCount: controller.listBayar?.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return CardPembayaran(
+                        nama: controller
+                                .listBayar?[index].pelanggan?.nama_pelanggan ??
+                            'Nama Pelanggan',
+                        desa: controller.listBayar?[index].desa?.nama_desa ??
+                            'Desa',
+                        harga:
+                            controller.listBayar?[index].nominal.toString() ??
+                                "Nominal",
+                      );
+                    },
+                  )),
           ),
         ),
       ),

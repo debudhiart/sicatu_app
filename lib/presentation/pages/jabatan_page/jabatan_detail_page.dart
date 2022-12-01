@@ -1,15 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 // import 'package:sicatu_app/presentation/pages/jabatan_edit_page.dart';
 import 'package:sicatu_app/presentation/pages/jabatan_page/jabatan_edit_page.dart';
 
 import '../../../common/constants.dart';
+import '../../controller/jabatan_controller.dart';
+import '../../service/jabatan_service.dart';
+import '../../widgets/search_loading.dart';
 // import '../../common/constants.dart';
 
-class JabatanDetailPage extends StatelessWidget {
-  const JabatanDetailPage({Key? key}) : super(key: key);
+class JabatanDetailPage extends StatefulWidget {
+  // const JabatanDetailPage({Key? key}) : super(key: key);
+  var jabatan_id;
+  JabatanDetailPage({required this.jabatan_id});
 
   @override
+  State<JabatanDetailPage> createState() => _JabatanDetailPageState();
+}
+
+class _JabatanDetailPageState extends State<JabatanDetailPage> {
+  var _jabatanDetailController = Get.put(JabatanController());
+
+  final _jabatanService = Get.put(JabatanService());
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        try {
+          _jabatanDetailController = Get.find<JabatanController>();
+        } catch (e) {
+          _jabatanDetailController = Get.put(JabatanController());
+        }
+        await _jabatanDetailController.getDetailJabatan(widget.jabatan_id);
+      },
+    );
+    super.initState();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -101,74 +129,88 @@ class JabatanDetailPage extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Container(
-                  height: 159,
-                  decoration: BoxDecoration(
-                    color: biruColor,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.05),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 0), // changes position of shadow
-                      ),
-                    ],
-                  ),
+        child: Obx(() => _jabatanDetailController.isLoading.value
+            ? Center(
+                child: SearchLoading(
+                  title: 'Loading Get Data Detail ',
+                  subtitle: '',
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16.0, left: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                // CircularProgressIndicator(),
+              )
+            : Column(
+                children: <Widget>[
+                  Stack(
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 108,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Kepala Desa',
-                              style: kHeading5Putih,
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return JabatanEditPage();
-                                    },
-                                  ),
-                                );
-                              },
-                              icon: Icon(
-                                Icons.edit,
-                                size: 30,
-                                color: Colors.white,
-                              ),
+                      Container(
+                        height: 159,
+                        decoration: BoxDecoration(
+                          color: biruColor,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.05),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 0), // changes position of shadow
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(
-                        height: 9,
-                      ),
-                      Text(
-                        "Panjer",
-                        style: kBodyText,
-                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16.0, left: 16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                top: 108,
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    _jabatanDetailController
+                                            .detailJabatan?.nama_jabatan ??
+                                        'Kepala Desa',
+                                    style: kHeading5Putih,
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return JabatanEditPage();
+                                          },
+                                        ),
+                                      );
+                                    },
+                                    icon: Icon(
+                                      Icons.edit,
+                                      size: 30,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 9,
+                            ),
+                            Text(
+                              _jabatanDetailController
+                                      .detailJabatan?.desa?.nama_desa ??
+                                  "Desa",
+                              style: kBodyText,
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
-                )
-              ],
-            ),
-          ],
-        ),
+                ],
+              )),
       ),
     );
   }

@@ -10,9 +10,6 @@ class ProvinsiService {
     var response = await http.get(Uri.parse(url));
     var data = json.decode(response.body);
 
-    print(response);
-    print(data);
-
     return List<Provinsi>.from(data["data"].map((x) => Provinsi.fromJson(x)));
   }
 

@@ -97,9 +97,8 @@ class ShiftViewPage extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => ShiftDetailPage(
-                                        // provinsi_id: controller
-                                        //     .listProvinsi![index].provinsi_id
-                                        ),
+                                        shift_id: controller
+                                            .listShift![index].shift_id),
                                   ),
                                 );
                               },

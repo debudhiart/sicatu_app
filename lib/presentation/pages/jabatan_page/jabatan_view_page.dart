@@ -88,6 +88,8 @@ class JabatanViewPage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => JabatanDetailPage(
+                                  jabatan_id:
+                                      controller.listJabatan![index].jabatan_id
                                   // users: snapshot.data['data'][index],
                                   ),
                             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 // import 'package:sicatu_app/presentation/pages/keluhan_create_page.dart';
 // import 'package:sicatu_app/presentation/pages/keluhan_detail_page.dart';
@@ -7,11 +8,20 @@ import 'package:sicatu_app/presentation/pages/keluhan_page/keluhan_detail_page.d
 
 import '../../../common/constants.dart';
 // import '../../common/constants.dart';
+import '../../controller/keluhan_controller.dart';
+import '../../service/keluhan_service.dart';
 import '../../widgets/navigation_drawer.dart';
+import '../../widgets/search_loading.dart';
 // import '../widgets/navigation_drawer.dart';
 
 class KeluhanViewPage extends StatelessWidget {
-  const KeluhanViewPage({Key? key}) : super(key: key);
+  // const KeluhanViewPage({Key? key}) : super(key: key);
+  final controller = Get.put(KeluhanController());
+  final service = Get.put(KeluhanService());
+
+  Future<void> _pullRefresh() async {
+    controller.getKeluhan();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,27 +67,43 @@ class KeluhanViewPage extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: <Widget>[
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return KeluhanDetailPage();
-                      },
+          child: RefreshIndicator(
+            onRefresh: _pullRefresh,
+            color: biruColor,
+            child: Obx(() => controller.isLoading.value
+                ? Center(
+                    child: SearchLoading(
+                      title: 'Loading Get Data Keluhan',
+                      subtitle: '',
                     ),
-                  );
-                },
-                child: CardKeluhan(
-                    nama: 'Budhi Arta K Giri',
-                    keluhan:
-                        'Terdapat sampah menumpuk di sepanjangan jalan kenangan kita slalu bergandeng tangan',
-                    desa: 'Pecatu'),
-              ),
-              // Text(snapshot.data['data'][index]['nama'])
-            ],
+                    // CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    itemCount: controller.listKeluhan?.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return KeluhanDetailPage();
+                              },
+                            ),
+                          );
+                        },
+                        child: CardKeluhan(
+                            nama: controller.listKeluhan?[index].pelanggan
+                                    ?.nama_pelanggan ??
+                                "Nama",
+                            keluhan: controller.listKeluhan?[index].keluhan ??
+                                "Keluhan",
+                            desa: controller
+                                    .listKeluhan?[index].desa?.nama_desa ??
+                                "Desa"),
+                      );
+                    },
+                  )),
           ),
         ),
       ),

@@ -12,4 +12,19 @@ class JabatanService {
 
     return List<Jabatan>.from(data["data"].map((x) => Jabatan.fromJson(x)));
   }
+
+  // Future<Jabatan> getDetailJabatanService(int id) async {
+  //   var response = await http.get(Uri.parse('$url/$id'));
+  //   var data = json.decode(response.body);
+
+  //   return Jabatan.fromJson(data['data']);
+  // }
+
+  Future<Jabatan> getDetailJabatanService(int id) async {
+    var response = await http.get(Uri.parse('$url/$id'));
+    var data = json.decode(response.body);
+    print(data);
+
+    return Jabatan.fromJson(data['data']);
+  }
 }

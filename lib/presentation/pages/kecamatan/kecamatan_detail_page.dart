@@ -1,13 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sicatu_app/presentation/pages/kecamatan/kecamatan_edit_page.dart';
 
 import '../../../common/constants.dart';
+import '../../controller/kecamatan_controller.dart';
+import '../../widgets/search_loading.dart';
 
-class KecamatanDetailPage extends StatelessWidget {
+class KecamatanDetailPage extends StatefulWidget {
   // const KecamatanDetailPage({Key? key}) : super(key: key);
   final int kecamatan_id;
   KecamatanDetailPage({required this.kecamatan_id});
+
+  @override
+  State<KecamatanDetailPage> createState() => _KecamatanDetailPageState();
+}
+
+class _KecamatanDetailPageState extends State<KecamatanDetailPage> {
+  var _kecamatanDetailController = Get.put(KecamatanController());
+  final _kecamatanController = Get.put(KecamatanController());
+
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        try {
+          _kecamatanDetailController = Get.find<KecamatanController>();
+        } catch (e) {
+          _kecamatanDetailController = Get.put(KecamatanController());
+        }
+        await _kecamatanDetailController
+            .getDetailKecamatan(widget.kecamatan_id);
+      },
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,80 +127,102 @@ class KecamatanDetailPage extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Container(
-                  height: 159,
-                  decoration: BoxDecoration(
-                    color: biruColor,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.05),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 0), // changes position of shadow
-                      ),
-                    ],
+        child: Obx(
+          () => _kecamatanDetailController.isLoading.value
+              ? Center(
+                  child: SearchLoading(
+                    title: 'Loading Get Data Kecamatan',
+                    subtitle: '',
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16.0, left: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 108,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Kuta Selatan',
-                              style: kHeading5Putih,
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return KecamatanEditPage();
-                                    },
-                                  ),
-                                );
-                              },
-                              icon: Icon(
-                                Icons.edit,
-                                size: 30,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 9,
-                      ),
-                      Text(
-                        "Badung",
-                        style: kBodyText,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "Bali",
-                        style: kBodyText,
-                      ),
-                    ],
-                  ),
+                  // CircularProgressIndicator(),
                 )
-              ],
-            ),
-          ],
+              : Column(
+                  children: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        Container(
+                          height: 159,
+                          decoration: BoxDecoration(
+                            color: biruColor,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.05),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset:
+                                    Offset(0, 0), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(right: 16.0, left: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 108,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      _kecamatanDetailController.detailKecamatan
+                                              ?.nama_kecamatan ??
+                                          'Kecamatan',
+                                      style: kHeading5Putih,
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) {
+                                              return KecamatanEditPage();
+                                            },
+                                          ),
+                                        );
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 30,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 9,
+                              ),
+                              Text(
+                                _kecamatanDetailController.detailKecamatan
+                                        ?.kabupaten_kota?.nama_kabupaten_kota ??
+                                    "Kabupaten Kota",
+                                style: kBodyText,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                _kecamatanDetailController
+                                        .detailKecamatan
+                                        ?.kabupaten_kota
+                                        ?.provinsi
+                                        ?.nama_provinsi ??
+                                    "Provinsi",
+                                style: kBodyText,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
         ),
       ),
     );

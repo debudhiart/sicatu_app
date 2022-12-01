@@ -3,6 +3,7 @@ import 'package:sicatu_app/data/datasources/models/kabupaten_kota.dart';
 import 'package:sicatu_app/presentation/service/kabupaten_kota_service.dart';
 
 class KabupatenKotaController extends GetxController {
+  KabupatenKota? detailKabupatenKota;
   List<KabupatenKota>? listKabupatenKota;
   RxBool isLoading = false.obs;
 
@@ -19,5 +20,13 @@ class KabupatenKotaController extends GetxController {
     listKabupatenKota = await service.getKabupatenKotaService();
     isLoading.value = false;
     return listKabupatenKota;
+  }
+
+  Future<KabupatenKota?> getDetailKabupatenKota(int id) async {
+    isLoading.value = true;
+    detailKabupatenKota = await service.getDetailKabupatenKotaService(id);
+    isLoading.value = false;
+    print(detailKabupatenKota);
+    return detailKabupatenKota;
   }
 }

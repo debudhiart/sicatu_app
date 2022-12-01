@@ -18,9 +18,9 @@ class Bayar {
   });
   int bayar_id;
   int desa_id;
-  String pelanggan_id;
-  String operator_id;
-  DateTime tanggal;
+  int pelanggan_id;
+  int operator_id;
+  String tanggal;
   int nominal;
   String? created_at;
   String? updated_at;

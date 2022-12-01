@@ -11,4 +11,14 @@ class KecamatanService {
 
     return List<Kecamatan>.from(data["data"].map((x) => Kecamatan.fromJson(x)));
   }
+
+  Future<Kecamatan> getDetailKecamatanService(int id) async {
+    var response = await http.get(Uri.parse('$url/$id'));
+    var data = json.decode(response.body);
+
+    print(response);
+    print(data);
+
+    return Kecamatan.fromJson(data['data']);
+  }
 }

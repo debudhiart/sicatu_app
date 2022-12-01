@@ -4,6 +4,7 @@ import 'package:sicatu_app/data/datasources/models/kecamatan.dart';
 import '../service/kecamatan_service.dart';
 
 class KecamatanController extends GetxController {
+  Kecamatan? detailKecamatan;
   List<Kecamatan>? listKecamatan;
   RxBool isLoading = false.obs;
 
@@ -20,5 +21,13 @@ class KecamatanController extends GetxController {
     listKecamatan = await service.getKecamatanService();
     isLoading.value = false;
     return listKecamatan;
+  }
+
+  Future<Kecamatan?> getDetailKecamatan(int id) async {
+    isLoading.value = true;
+    detailKecamatan = await service.getDetailKecamatanService(id);
+    isLoading.value = false;
+    print(detailKecamatan);
+    return detailKecamatan;
   }
 }

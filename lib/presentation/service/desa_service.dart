@@ -12,4 +12,11 @@ class DesaService {
 
     return List<Desa>.from(data["data"].map((x) => Desa.fromJson(x)));
   }
+
+  Future<Desa> getDetailDesaService(int id) async {
+    var response = await http.get(Uri.parse('$url/$id'));
+    var data = json.decode(response.body);
+
+    return Desa.fromJson(data['data']);
+  }
 }

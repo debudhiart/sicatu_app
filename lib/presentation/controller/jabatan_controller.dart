@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-// import 'package:sicatu_app/data/datasources/models/Kecamatan.dart';
 
 import '../../data/datasources/models/jabatan.dart';
 
 import '../service/jabatan_service.dart';
 
 class JabatanController extends GetxController {
+  Jabatan? detailJabatan;
   List<Jabatan>? listJabatan;
   RxBool isLoading = false.obs;
 
@@ -22,5 +22,13 @@ class JabatanController extends GetxController {
     listJabatan = await service.getJabatanService();
     isLoading.value = false;
     return listJabatan;
+  }
+
+  Future<Jabatan?> getDetailJabatan(int id) async {
+    isLoading.value = true;
+    detailJabatan = await service.getDetailJabatanService(id);
+    isLoading.value = false;
+    print(detailJabatan);
+    return detailJabatan;
   }
 }

@@ -98,9 +98,9 @@ class DesaViewPage extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) {
-                                      return DesaDetailPage();
-                                    },
+                                    builder: (context) => DesaDetailPage(
+                                        desa_id: controller
+                                            .listDesa![index].desa_id),
                                   ),
                                 );
                               },

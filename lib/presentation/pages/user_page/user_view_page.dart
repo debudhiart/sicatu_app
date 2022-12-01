@@ -105,7 +105,7 @@ class UserViewPage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => UserDetailPage(
-                                users: controller.listUser![index],
+                                users_id: controller.listUser![index].users_id,
                               ),
                             ),
                           );

@@ -12,4 +12,14 @@ class KabupatenKotaService {
     return List<KabupatenKota>.from(
         data["data"].map((x) => KabupatenKota.fromJson(x)));
   }
+
+  Future<KabupatenKota> getDetailKabupatenKotaService(int id) async {
+    var response = await http.get(Uri.parse('$url/$id'));
+    var data = json.decode(response.body);
+
+    print(response);
+    print(data);
+
+    return KabupatenKota.fromJson(data['data']);
+  }
 }
