@@ -13,4 +13,11 @@ class JenisLanggananService {
     return List<JenisLangganan>.from(
         data["data"].map((x) => JenisLangganan.fromJson(x)));
   }
+
+  Future<JenisLangganan> getDetailJenisLanggananService(int id) async {
+    var response = await http.get(Uri.parse('$url/$id'));
+    var data = json.decode(response.body);
+
+    return JenisLangganan.fromJson(data['data']);
+  }
 }

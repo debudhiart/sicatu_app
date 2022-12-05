@@ -84,6 +84,9 @@ class JadwalPelangganViewPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          SizedBox(
+                            height: 15,
+                          ),
                           Text(
                             'Senin',
                             style: kHeading5,
@@ -110,6 +113,8 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                       // hari:
                                       //     controller.listJadwalPelanggan?[index].hari ??
                                       //         "Hari",
+                                      id: controller.listJadwalPelanggan![index]
+                                          .jadwal_pelanggan_id,
                                       nama: controller
                                               .listJadwalPelanggan?[index]
                                               .pelanggan
@@ -123,7 +128,9 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                   : Text('Salah Hari');
                             },
                           ),
-
+                          SizedBox(
+                            height: 15,
+                          ),
                           Text(
                             'Selasa',
                             style: kHeading5,
@@ -145,6 +152,8 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                       // hari:
                                       //     controller.listJadwalPelanggan?[index].hari ??
                                       //         "Hari",
+                                      id: controller.listJadwalPelanggan![index]
+                                          .jadwal_pelanggan_id,
                                       nama: controller
                                               .listJadwalPelanggan?[index]
                                               .pelanggan
@@ -157,6 +166,9 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                           "Desa")
                                   : Text('Salah Hari');
                             },
+                          ),
+                          SizedBox(
+                            height: 15,
                           ),
                           Text(
                             'Rabu',
@@ -179,6 +191,8 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                       // hari:
                                       //     controller.listJadwalPelanggan?[index].hari ??
                                       //         "Hari",
+                                      id: controller.listJadwalPelanggan![index]
+                                          .jadwal_pelanggan_id,
                                       nama: controller
                                               .listJadwalPelanggan?[index]
                                               .pelanggan
@@ -191,6 +205,9 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                           "Desa")
                                   : Text('Salah Hari');
                             },
+                          ),
+                          SizedBox(
+                            height: 15,
                           ),
                           Text(
                             'Kamis',
@@ -213,6 +230,8 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                       // hari:
                                       //     controller.listJadwalPelanggan?[index].hari ??
                                       //         "Hari",
+                                      id: controller.listJadwalPelanggan![index]
+                                          .jadwal_pelanggan_id,
                                       nama: controller
                                               .listJadwalPelanggan?[index]
                                               .pelanggan
@@ -225,6 +244,9 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                           "Desa")
                                   : Text('Salah Hari');
                             },
+                          ),
+                          SizedBox(
+                            height: 15,
                           ),
                           Text(
                             'Jumat',
@@ -247,6 +269,8 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                       // hari:
                                       //     controller.listJadwalPelanggan?[index].hari ??
                                       //         "Hari",
+                                      id: controller.listJadwalPelanggan![index]
+                                          .jadwal_pelanggan_id,
                                       nama: controller
                                               .listJadwalPelanggan?[index]
                                               .pelanggan
@@ -259,6 +283,9 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                           "Desa")
                                   : Text('Salah Hari');
                             },
+                          ),
+                          SizedBox(
+                            height: 15,
                           ),
                           Text(
                             'Sabtu',
@@ -278,6 +305,8 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                       // hari:
                                       //     controller.listJadwalPelanggan?[index].hari ??
                                       //         "Hari",
+                                      id: controller.listJadwalPelanggan![index]
+                                          .jadwal_pelanggan_id,
                                       nama: controller
                                               .listJadwalPelanggan?[index]
                                               .pelanggan
@@ -312,6 +341,8 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                       // hari:
                                       //     controller.listJadwalPelanggan?[index].hari ??
                                       //         "Hari",
+                                      id: controller.listJadwalPelanggan![index]
+                                          .jadwal_pelanggan_id,
                                       nama: controller
                                               .listJadwalPelanggan?[index]
                                               .pelanggan

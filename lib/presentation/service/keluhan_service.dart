@@ -12,4 +12,11 @@ class KeluhanService {
 
     return List<Keluhan>.from(data["data"].map((x) => Keluhan.fromJson(x)));
   }
+
+  Future<Keluhan> getDetailKeluhanService(int id) async {
+    var response = await http.get(Uri.parse('$url/$id'));
+    var data = json.decode(response.body);
+
+    return Keluhan.fromJson(data['data']);
+  }
 }

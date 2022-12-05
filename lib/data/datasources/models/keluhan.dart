@@ -9,7 +9,7 @@ class Keluhan {
     required this.pelanggan_id,
     required this.keluhan,
     this.respon,
-    this.status_keluhan,
+    required this.status_keluhan,
     this.before_photo,
     this.after_photo,
     this.created_at,
@@ -22,7 +22,7 @@ class Keluhan {
   int pelanggan_id;
   String keluhan;
   String? respon;
-  String? status_keluhan;
+  String status_keluhan;
   String? before_photo;
   String? after_photo;
   String? created_at;

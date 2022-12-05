@@ -19,7 +19,7 @@ import '../pages/jabatan_page/jabatan_view_page.dart';
 import '../pages/jadwal_pelanggan_page/jadwal_pelanggan_view_page.dart';
 import '../pages/jadwal_petugas_page/jadwal_petugas_view_page.dart';
 import '../pages/jenis_langganan/jenis_langganan_view_page.dart';
-import '../pages/keluhan_page/keluhan_view_page.dart';
+import '../pages/keluhan/keluhan_view_page.dart';
 import '../pages/pembayaran_page/pembayaran_view_page.dart';
 import '../pages/shift_page/shift_view_page.dart';
 import '../pages/user_page/user_view_page.dart';

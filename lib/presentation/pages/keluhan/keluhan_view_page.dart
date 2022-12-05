@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 // import 'package:sicatu_app/presentation/pages/keluhan_create_page.dart';
 // import 'package:sicatu_app/presentation/pages/keluhan_detail_page.dart';
-import 'package:sicatu_app/presentation/pages/keluhan_page/keluhan_create_page.dart';
-import 'package:sicatu_app/presentation/pages/keluhan_page/keluhan_detail_page.dart';
+import 'package:sicatu_app/presentation/pages/keluhan/keluhan_create_page.dart';
+import 'package:sicatu_app/presentation/pages/keluhan/keluhan_detail_page.dart';
 
 import '../../../common/constants.dart';
 // import '../../common/constants.dart';
@@ -87,7 +87,10 @@ class KeluhanViewPage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return KeluhanDetailPage();
+                                return KeluhanDetailPage(
+                                  keluhan_id:
+                                      controller.listKeluhan![index].keluhan_id,
+                                );
                               },
                             ),
                           );

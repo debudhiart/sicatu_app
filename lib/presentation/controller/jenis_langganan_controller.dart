@@ -6,6 +6,7 @@ import '../service/jadwal_pelanggan_service.dart';
 import '../service/jenis_langganan_service.dart';
 
 class JenisLanggananController extends GetxController {
+  JenisLangganan? detailJenisLangganan;
   List<JenisLangganan>? listJenisLangganan;
   RxBool isLoading = false.obs;
 
@@ -22,5 +23,13 @@ class JenisLanggananController extends GetxController {
     listJenisLangganan = await service.getJenisLanggananService();
     isLoading.value = false;
     return listJenisLangganan;
+  }
+
+  Future<JenisLangganan?> getDetailJenisLangganan(int id) async {
+    isLoading.value = true;
+    detailJenisLangganan = await service.getDetailJenisLanggananService(id);
+    isLoading.value = false;
+    print(detailJenisLangganan);
+    return detailJenisLangganan;
   }
 }

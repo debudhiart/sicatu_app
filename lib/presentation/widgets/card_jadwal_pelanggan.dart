@@ -6,10 +6,12 @@ import '../pages/jadwal_pelanggan_page/jadwal_pelanggan_detail_page.dart';
 class CardJadwalPelanggan extends StatelessWidget {
   // const CardJadwalPelanggan({Key? key}) : super(key: key);
 
+  int id;
   String nama;
   String desa;
 
   CardJadwalPelanggan({
+    required this.id,
     required this.nama,
     required this.desa,
   });
@@ -22,7 +24,9 @@ class CardJadwalPelanggan extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return JadwalPelangganDetailPage();
+              return JadwalPelangganDetailPage(
+                jadwal_pelanggan_id: id,
+              );
             },
           ),
         );

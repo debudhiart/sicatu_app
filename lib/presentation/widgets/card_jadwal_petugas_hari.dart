@@ -6,10 +6,16 @@ import '../pages/jadwal_petugas_page/jadwal_petugas_detail_page.dart';
 
 class CardJadwalPetugasHari extends StatelessWidget {
   // const CardJadwalPetugasHari({Key? key}) : super(key: key);
-  String hari;
+  // String hari;
+  String nama;
+  String desa;
+  int id;
 
   CardJadwalPetugasHari({
-    required this.hari,
+    // required this.hari,
+    required this.id,
+    required this.nama,
+    required this.desa,
   });
 
   @override
@@ -17,16 +23,15 @@ class CardJadwalPetugasHari extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Text(
-          hari,
-          style: kHeading5,
-        ),
-        SizedBox(
-          height: 25,
-        ),
+        // Text(
+        //   hari,
+        //   style: kHeading5,
+        // ),
+
         CardJadwalPetugas(
-          nama: 'Budhi Arta K Giri',
-          desa: 'Pecatu',
+          id: id,
+          nama: nama,
+          desa: desa,
         ),
         SizedBox(
           height: 10,

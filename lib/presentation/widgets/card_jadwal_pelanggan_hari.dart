@@ -7,6 +7,7 @@ import '../pages/jadwal_pelanggan_page/jadwal_pelanggan_detail_page.dart';
 class CardJadwalPelangganHari extends StatelessWidget {
   // const CardJadwalPelangganHari({Key? key}) : super(key: key);
 
+  int id;
   String nama;
   String desa;
   // String hari;
@@ -16,6 +17,7 @@ class CardJadwalPelangganHari extends StatelessWidget {
   CardJadwalPelangganHari({
     // required this.jenisLangganan,
     // required this.hari,
+    required this.id,
     required this.nama,
     required this.desa,
   });
@@ -26,6 +28,7 @@ class CardJadwalPelangganHari extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         CardJadwalPelanggan(
+          id: id,
           nama: nama,
           desa: desa,
         ),

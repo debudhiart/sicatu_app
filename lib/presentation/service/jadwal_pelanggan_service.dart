@@ -13,4 +13,11 @@ class JadwalPelangganService {
     return List<JadwalPelanggan>.from(
         data["data"].map((x) => JadwalPelanggan.fromJson(x)));
   }
+
+  Future<JadwalPelanggan> getDetailJadwalPelangganService(int id) async {
+    var response = await http.get(Uri.parse('$url/$id'));
+    var data = json.decode(response.body);
+
+    return JadwalPelanggan.fromJson(data['data']);
+  }
 }

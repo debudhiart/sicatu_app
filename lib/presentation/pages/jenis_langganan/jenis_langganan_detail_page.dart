@@ -1,13 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sicatu_app/presentation/pages/jenis_langganan/jenis_langganan_edit_page.dart';
 // import 'package:sicatu_app/presentation/pages/jenis_langganan_edit_page.dart';
 
 import '../../../common/constants.dart';
+import '../../controller/jenis_langganan_controller.dart';
+import '../../service/jenis_langganan_service.dart';
+import '../../widgets/search_loading.dart';
 // import '../../common/constants.dart';
 
-class JenisLanggananDetailPage extends StatelessWidget {
-  const JenisLanggananDetailPage({Key? key}) : super(key: key);
+class JenisLanggananDetailPage extends StatefulWidget {
+  // const JenisLanggananDetailPage({Key? key}) : super(key: key);
+  var jenis_langganan_id;
+  JenisLanggananDetailPage({required this.jenis_langganan_id});
+
+  @override
+  State<JenisLanggananDetailPage> createState() =>
+      _JenisLanggananDetailPageState();
+}
+
+class _JenisLanggananDetailPageState extends State<JenisLanggananDetailPage> {
+  var _jenisLanggananDetailController = Get.put(JenisLanggananController());
+
+  final _jenisLanggananService = Get.put(JenisLanggananService());
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        try {
+          _jenisLanggananDetailController =
+              Get.find<JenisLanggananController>();
+        } catch (e) {
+          _jenisLanggananDetailController = Get.put(JenisLanggananController());
+        }
+        await _jenisLanggananDetailController
+            .getDetailJenisLangganan(widget.jenis_langganan_id);
+      },
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,80 +133,103 @@ class JenisLanggananDetailPage extends StatelessWidget {
         ),
       ),
       body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Container(
-                  height: 159,
-                  decoration: BoxDecoration(
-                    color: biruColor,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.05),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 0), // changes position of shadow
-                      ),
-                    ],
+        child: Obx(
+          () => _jenisLanggananDetailController.isLoading.value
+              ? Center(
+                  child: SearchLoading(
+                    title: 'Loading Get Data Detail ',
+                    subtitle: '',
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16.0, left: 16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 108,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            Text(
-                              'Budhi Arta K Giri',
-                              style: kHeading5Putih,
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return JenisLanggananEditPage();
-                                    },
-                                  ),
-                                );
-                              },
-                              icon: Icon(
-                                Icons.edit,
-                                size: 30,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 9,
-                      ),
-                      Text(
-                        "Panjer",
-                        style: kBodyText,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "Rp. 10.000",
-                        style: kBodyText,
-                      ),
-                    ],
-                  ),
+                  // CircularProgressIndicator(),
                 )
-              ],
-            ),
-          ],
+              : Column(
+                  children: <Widget>[
+                    Stack(
+                      children: <Widget>[
+                        Container(
+                          height: 159,
+                          decoration: BoxDecoration(
+                            color: biruColor,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.05),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset:
+                                    Offset(0, 0), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(right: 16.0, left: 16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 108,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      _jenisLanggananDetailController
+                                              .detailJenisLangganan
+                                              ?.nama_jenis_langganan ??
+                                          'Jenis Langganan',
+                                      style: kHeading5Putih,
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) {
+                                              return JenisLanggananEditPage();
+                                            },
+                                          ),
+                                        );
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        size: 30,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(
+                                height: 9,
+                              ),
+                              Text(
+                                _jenisLanggananDetailController
+                                        .detailJenisLangganan
+                                        ?.desa
+                                        ?.nama_desa ??
+                                    "Desa",
+                                style: kBodyText,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                _jenisLanggananDetailController
+                                        .detailJenisLangganan?.harga
+                                        .toString() ??
+                                    "Harga",
+                                style: kBodyText,
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
         ),
       ),
     );

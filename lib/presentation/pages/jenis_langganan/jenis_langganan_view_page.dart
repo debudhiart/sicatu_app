@@ -87,7 +87,11 @@ class JenisLanggananViewPage extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) {
-                                return JenisLanggananDetailPage();
+                                return JenisLanggananDetailPage(
+                                  jenis_langganan_id: controller
+                                      .listJenisLangganan![index]
+                                      .jenis_langganan_id,
+                                );
                               },
                             ),
                           );
