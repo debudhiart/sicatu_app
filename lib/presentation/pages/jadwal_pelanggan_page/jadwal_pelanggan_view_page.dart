@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:sicatu_app/presentation/pages/jadwal_pelanggan_create_page.dart';
 // import 'package:sicatu_app/presentation/pages/jadwal_pelanggan_detail_page.dart';
 import 'package:sicatu_app/presentation/pages/jadwal_pelanggan_page/jadwal_pelanggan_create_page.dart';
@@ -10,18 +13,46 @@ import 'package:sicatu_app/presentation/widgets/card_jadwal_pelanggan_hari.dart'
 import '../../../common/constants.dart';
 // import '../../common/constants.dart';
 import '../../controller/jadwal_pelanggan_controller.dart';
+import '../../controller/user_detail_controller.dart';
 import '../../service/jadwal_pelanggan_service.dart';
 import '../../widgets/navigation_drawer.dart';
 import '../../widgets/search_loading.dart';
 // import '../widgets/navigation_drawer.dart';
 
-class JadwalPelangganViewPage extends StatelessWidget {
+class JadwalPelangganViewPage extends StatefulWidget {
+  @override
+  State<JadwalPelangganViewPage> createState() =>
+      _JadwalPelangganViewPageState();
+}
+
+class _JadwalPelangganViewPageState extends State<JadwalPelangganViewPage> {
   // const JadwalPelangganViewPage({Key? key}) : super(key: key);
+
+  int roles_id = 0;
+
+  var _userDetailController = Get.put(UserDetailController());
+
   final controller = Get.put(JadwalPelangganController());
-  final service = Get.put(JadwalPelangganService());
 
   Future<void> _pullRefresh() async {
     controller.getJadwalPelanggan();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  _loadUserData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user') ?? '');
+
+    if (user != null) {
+      setState(() {
+        roles_id = user['roles_id'];
+      });
+    }
   }
 
   @override
@@ -51,18 +82,26 @@ class JadwalPelangganViewPage extends StatelessWidget {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: biruColor,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return JadwalPelangganCreatePage();
+      floatingActionButton: LayoutBuilder(
+        builder: (context, constraints) {
+          if (roles_id == 1 || roles_id == 2) {
+            return FloatingActionButton(
+              child: Icon(Icons.add),
+              backgroundColor: biruColor,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return JadwalPelangganCreatePage();
+                    },
+                  ),
+                );
               },
-            ),
-          );
+            );
+          } else {
+            return SizedBox();
+          }
         },
       ),
       body: SafeArea(
@@ -125,7 +164,7 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                               .desa
                                               ?.nama_desa ??
                                           "Desa")
-                                  : Text('Salah Hari');
+                                  : SizedBox();
                             },
                           ),
                           SizedBox(
@@ -164,7 +203,7 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                               .desa
                                               ?.nama_desa ??
                                           "Desa")
-                                  : Text('Salah Hari');
+                                  : SizedBox();
                             },
                           ),
                           SizedBox(
@@ -203,7 +242,7 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                               .desa
                                               ?.nama_desa ??
                                           "Desa")
-                                  : Text('Salah Hari');
+                                  : SizedBox();
                             },
                           ),
                           SizedBox(
@@ -242,7 +281,7 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                               .desa
                                               ?.nama_desa ??
                                           "Desa")
-                                  : Text('Salah Hari');
+                                  : SizedBox();
                             },
                           ),
                           SizedBox(
@@ -281,7 +320,7 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                               .desa
                                               ?.nama_desa ??
                                           "Desa")
-                                  : Text('Salah Hari');
+                                  : SizedBox();
                             },
                           ),
                           SizedBox(
@@ -290,6 +329,9 @@ class JadwalPelangganViewPage extends StatelessWidget {
                           Text(
                             'Sabtu',
                             style: kHeading5,
+                          ),
+                          SizedBox(
+                            height: 15,
                           ),
                           ListView.builder(
                             shrinkWrap: true,
@@ -317,7 +359,7 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                               .desa
                                               ?.nama_desa ??
                                           "Desa")
-                                  : Text('Salah Hari');
+                                  : SizedBox();
                             },
                           ),
                           SizedBox(
@@ -326,6 +368,9 @@ class JadwalPelangganViewPage extends StatelessWidget {
                           Text(
                             'Minggu',
                             style: kHeading5,
+                          ),
+                          SizedBox(
+                            height: 15,
                           ),
                           ListView.builder(
                             shrinkWrap: true,
@@ -353,7 +398,7 @@ class JadwalPelangganViewPage extends StatelessWidget {
                                               .desa
                                               ?.nama_desa ??
                                           "Desa")
-                                  : Text('Salah Hari');
+                                  : SizedBox();
                             },
                           ),
                           SizedBox(

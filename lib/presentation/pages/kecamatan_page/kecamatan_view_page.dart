@@ -1,22 +1,50 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sicatu_app/presentation/pages/kabupaten_kota/kabupaten_kota_create_page.dart';
-import 'package:sicatu_app/presentation/pages/kabupaten_kota/kabupaten_kota_detail_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sicatu_app/presentation/pages/kecamatan_page/kecamatan_create_page.dart';
+import 'package:sicatu_app/presentation/pages/kecamatan_page/kecamatan_detail_page.dart';
 
 import '../../../common/constants.dart';
-import '../../controller/kabupaten_kota_controller.dart';
-import '../../service/kabupaten_kota_service.dart';
-import '../../widgets/navigation_drawer.dart';
+import '../../controller/kecamatan_controller.dart';
+import '../../controller/user_detail_controller.dart';
+import '../../service/kecamatan_service.dart';
 import '../../widgets/search_loading.dart';
 
-class KabupatenKotaViewPage extends StatelessWidget {
-  // const KabupatenKotaViewPage({Key? key}) : super(key: key);
-  final controller = Get.put(KabupatenKotaController());
-  final service = Get.put(KabupatenKotaService());
+class KecamatanViewPage extends StatefulWidget {
+  @override
+  State<KecamatanViewPage> createState() => _KecamatanViewPageState();
+}
+
+class _KecamatanViewPageState extends State<KecamatanViewPage> {
+  int roles_id = 0;
+
+  var _userDetailController = Get.put(UserDetailController());
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  // const KecamatanViewPage({Key? key}) : super(key: key);
+  final controller = Get.put(KecamatanController());
 
   Future<void> _pullRefresh() async {
-    controller.getKabupatenKota();
+    controller.getKecamatan();
+  }
+
+  _loadUserData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user') ?? '');
+
+    if (user != null) {
+      setState(() {
+        roles_id = user['roles_id'];
+      });
+    }
   }
 
   @override
@@ -25,7 +53,7 @@ class KabupatenKotaViewPage extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
-          'Kabupaten/Kota',
+          'Kecamatan',
           style: GoogleFonts.inter(
             color: hitamColor,
             fontSize: 22,
@@ -45,19 +73,29 @@ class KabupatenKotaViewPage extends StatelessWidget {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: biruColor,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return KabupatenKotaCreatePage();
-              },
-            ),
-          );
-        },
+      floatingActionButton: Container(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (roles_id == 1) {
+              return FloatingActionButton(
+                child: Icon(Icons.add),
+                backgroundColor: biruColor,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return KecamatanCreatePage();
+                      },
+                    ),
+                  );
+                },
+              );
+            } else {
+              return SizedBox();
+            }
+          },
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -69,13 +107,13 @@ class KabupatenKotaViewPage extends StatelessWidget {
               () => controller.isLoading.value
                   ? Center(
                       child: SearchLoading(
-                        title: 'Loading Get Data Kabupaten Kota',
+                        title: 'Loading Get Data Kecamatan',
                         subtitle: '',
                       ),
                       // CircularProgressIndicator(),
                     )
                   : ListView.builder(
-                      itemCount: controller.listKabupatenKota?.length,
+                      itemCount: controller.listKecamatan?.length,
                       itemBuilder: (BuildContext context, int index) {
                         return GridView.count(
                           physics: NeverScrollableScrollPhysics(),
@@ -90,19 +128,17 @@ class KabupatenKotaViewPage extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) =>
-                                        KabupatenKotaDetailPage(
-                                            kabupaten_kota_id: controller
-                                                .listKabupatenKota![index]
-                                                .kabupaten_kota_id),
+                                    builder: (context) => KecamatanDetailPage(
+                                        kecamatan_id: controller
+                                            .listKecamatan![index]
+                                            .kecamatan_id),
                                   ),
                                 );
                               },
-                              child: CardKabupatenKota(
-                                kabupatenKota: controller
-                                        .listKabupatenKota?[index]
-                                        .nama_kabupaten_kota ??
-                                    "Nama Kabupaten",
+                              child: CardKecamatan(
+                                kecamatan: controller
+                                        .listKecamatan?[index].nama_kecamatan ??
+                                    "Kecamatan",
                               ),
                             ),
                           ],
@@ -118,15 +154,15 @@ class KabupatenKotaViewPage extends StatelessWidget {
   }
 }
 
-class CardKabupatenKota extends StatelessWidget {
-  // const CardKabupatenKota({
+class CardKecamatan extends StatelessWidget {
+  // const CardKecamatan({
   //   Key? key,
   // }) : super(key: key);
 
-  String kabupatenKota;
+  String kecamatan;
 
-  CardKabupatenKota({
-    required this.kabupatenKota,
+  CardKecamatan({
+    required this.kecamatan,
   });
 
   @override
@@ -143,7 +179,7 @@ class CardKabupatenKota extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: Text(
-                  kabupatenKota,
+                  kecamatan,
                   style: ktittle,
                 ),
               ),

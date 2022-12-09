@@ -1,49 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sicatu_app/presentation/controller/kabupaten_kota_controller.dart';
-import 'package:sicatu_app/presentation/pages/kabupaten_kota/kabupaten_kota_edit_page.dart';
+import 'package:sicatu_app/presentation/pages/kecamatan_page/kecamatan_edit_page.dart';
 
 import '../../../common/constants.dart';
+import '../../controller/kecamatan_controller.dart';
 import '../../widgets/search_loading.dart';
 
-class KabupatenKotaDetailPage extends StatefulWidget {
-  // const KabupatenKotaDetailPage({Key? key}) : super(key: key);
-
-  final int kabupaten_kota_id;
-  KabupatenKotaDetailPage({required this.kabupaten_kota_id});
+class KecamatanDetailPage extends StatefulWidget {
+  // const KecamatanDetailPage({Key? key}) : super(key: key);
+  final int kecamatan_id;
+  KecamatanDetailPage({required this.kecamatan_id});
 
   @override
-  State<KabupatenKotaDetailPage> createState() =>
-      _KabupatenKotaDetailPageState();
+  State<KecamatanDetailPage> createState() => _KecamatanDetailPageState();
 }
 
-class _KabupatenKotaDetailPageState extends State<KabupatenKotaDetailPage> {
-  var _kabupatenKotaDetailController = Get.put(KabupatenKotaController());
-  final _kabupatenKotaController = Get.put(KabupatenKotaController());
+class _KecamatanDetailPageState extends State<KecamatanDetailPage> {
+  var _kecamatanDetailController = Get.put(KecamatanController());
 
-  @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
         try {
-          _kabupatenKotaDetailController = Get.find<KabupatenKotaController>();
+          _kecamatanDetailController = Get.find<KecamatanController>();
         } catch (e) {
-          _kabupatenKotaDetailController = Get.put(KabupatenKotaController());
+          _kecamatanDetailController = Get.put(KecamatanController());
         }
-        await _kabupatenKotaDetailController
-            .getDetailKabupatenKota(widget.kabupaten_kota_id);
+        await _kecamatanDetailController
+            .getDetailKecamatan(widget.kecamatan_id);
       },
     );
     super.initState();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
-          'Detail Kabupaten/Kota',
+          'Detail Kecamatan',
           style: GoogleFonts.inter(
             color: hitamColor,
             fontSize: 22,
@@ -71,11 +68,11 @@ class _KabupatenKotaDetailPageState extends State<KabupatenKotaDetailPage> {
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: Text(
-                    'Hapus Kabupaten/Kota',
+                    'Hapus Kecamatan',
                     style: kalerttittle,
                   ),
                   content: Text(
-                    'Yakin ingin hapus Kabupaten/Kota ini?',
+                    'Yakin ingin hapus Kecamatan ini?',
                     style: kdescription14hitam,
                   ),
                   actions: <Widget>[
@@ -118,7 +115,7 @@ class _KabupatenKotaDetailPageState extends State<KabupatenKotaDetailPage> {
                   width: 10,
                 ),
                 Text(
-                  "Delete Kabupaten/Kota",
+                  "Delete Kecamatan",
                   style: TextStyle(
                       color: Colors.white,
                       decoration: TextDecoration.underline),
@@ -130,10 +127,10 @@ class _KabupatenKotaDetailPageState extends State<KabupatenKotaDetailPage> {
       ),
       body: SafeArea(
         child: Obx(
-          () => _kabupatenKotaDetailController.isLoading.value
+          () => _kecamatanDetailController.isLoading.value
               ? Center(
                   child: SearchLoading(
-                    title: 'Loading Get Data Detail ',
+                    title: 'Loading Get Data Kecamatan',
                     subtitle: '',
                   ),
                   // CircularProgressIndicator(),
@@ -172,10 +169,9 @@ class _KabupatenKotaDetailPageState extends State<KabupatenKotaDetailPage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
-                                      _kabupatenKotaController
-                                              .detailKabupatenKota
-                                              ?.nama_kabupaten_kota ??
-                                          'Badung',
+                                      _kecamatanDetailController.detailKecamatan
+                                              ?.nama_kecamatan ??
+                                          'Kecamatan',
                                       style: kHeading5Putih,
                                     ),
                                     IconButton(
@@ -184,7 +180,7 @@ class _KabupatenKotaDetailPageState extends State<KabupatenKotaDetailPage> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) {
-                                              return KabupatenKotaEditPage();
+                                              return KecamatanEditPage();
                                             },
                                           ),
                                         );
@@ -202,8 +198,20 @@ class _KabupatenKotaDetailPageState extends State<KabupatenKotaDetailPage> {
                                 height: 9,
                               ),
                               Text(
-                                _kabupatenKotaController.detailKabupatenKota
-                                        ?.provinsi?.nama_provinsi ??
+                                _kecamatanDetailController.detailKecamatan
+                                        ?.kabupaten_kota?.nama_kabupaten_kota ??
+                                    "Kabupaten Kota",
+                                style: kBodyText,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                _kecamatanDetailController
+                                        .detailKecamatan
+                                        ?.kabupaten_kota
+                                        ?.provinsi
+                                        ?.nama_provinsi ??
                                     "Provinsi",
                                 style: kBodyText,
                               ),

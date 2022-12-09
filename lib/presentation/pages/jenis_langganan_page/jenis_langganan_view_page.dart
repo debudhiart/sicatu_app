@@ -1,26 +1,53 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sicatu_app/presentation/pages/jenis_langganan/jenis_langganan_create_page.dart';
-import 'package:sicatu_app/presentation/pages/jenis_langganan/jenis_langganan_detail_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sicatu_app/presentation/pages/jenis_langganan_page/jenis_langganan_create_page.dart';
+import 'package:sicatu_app/presentation/pages/jenis_langganan_page/jenis_langganan_detail_page.dart';
 // import 'package:sicatu_app/presentation/pages/jenis_langganan_create_page.dart';
 // import 'package:sicatu_app/presentation/pages/jenis_langganan_detail_page.dart';
 
 import '../../../common/constants.dart';
 import '../../controller/jenis_langganan_controller.dart';
+import '../../controller/user_detail_controller.dart';
 import '../../service/jenis_langganan_service.dart';
 import '../../widgets/navigation_drawer.dart';
 import '../../widgets/search_loading.dart';
 // import '../../common/constants.dart';
 // import '../widgets/navigation_drawer.dart';
 
-class JenisLanggananViewPage extends StatelessWidget {
+class JenisLanggananViewPage extends StatefulWidget {
+  @override
+  State<JenisLanggananViewPage> createState() => _JenisLanggananViewPageState();
+}
+
+class _JenisLanggananViewPageState extends State<JenisLanggananViewPage> {
   // const JenisLanggananViewPage({Key? key}) : super(key: key);
+  int roles_id = 0;
+
   final controller = Get.put(JenisLanggananController());
-  final service = Get.put(JenisLanggananService());
 
   Future<void> _pullRefresh() async {
     controller.getJenisLangganan();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  _loadUserData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user') ?? '');
+
+    if (user != null) {
+      setState(() {
+        roles_id = user['roles_id'];
+      });
+    }
   }
 
   @override
@@ -50,18 +77,26 @@ class JenisLanggananViewPage extends StatelessWidget {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: biruColor,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return JenisLanggananCreatePage();
+      floatingActionButton: LayoutBuilder(
+        builder: (context, constraints) {
+          if (roles_id == 1 || roles_id == 2) {
+            return FloatingActionButton(
+              child: Icon(Icons.add),
+              backgroundColor: biruColor,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return JenisLanggananCreatePage();
+                    },
+                  ),
+                );
               },
-            ),
-          );
+            );
+          } else {
+            return SizedBox();
+          }
         },
       ),
       body: SafeArea(
@@ -70,45 +105,47 @@ class JenisLanggananViewPage extends StatelessWidget {
           child: RefreshIndicator(
             onRefresh: _pullRefresh,
             color: biruColor,
-            child: Obx(() => controller.isLoading.value
-                ? Center(
-                    child: SearchLoading(
-                      title: 'Loading Get Data Jenis Langganan',
-                      subtitle: '',
+            child: Obx(
+              () => controller.isLoading.value
+                  ? Center(
+                      child: SearchLoading(
+                        title: 'Loading Get Data Jenis Langganan',
+                        subtitle: '',
+                      ),
+                      // CircularProgressIndicator(),
+                    )
+                  : ListView.builder(
+                      itemCount: controller.listJenisLangganan?.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return JenisLanggananDetailPage(
+                                    jenis_langganan_id: controller
+                                        .listJenisLangganan![index]
+                                        .jenis_langganan_id,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          child: CardJenisLangganan(
+                            nama_jenis_layanan: controller
+                                    .listJenisLangganan?[index]
+                                    .nama_jenis_langganan ??
+                                "Jenis Langganan",
+                            desa: controller.listJenisLangganan?[index].desa
+                                    ?.nama_desa ??
+                                "Desa",
+                            harga: controller.listJenisLangganan![index].harga,
+                          ),
+                        );
+                      },
                     ),
-                    // CircularProgressIndicator(),
-                  )
-                : ListView.builder(
-                    itemCount: controller.listJenisLangganan?.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return JenisLanggananDetailPage(
-                                  jenis_langganan_id: controller
-                                      .listJenisLangganan![index]
-                                      .jenis_langganan_id,
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        child: CardJenisLangganan(
-                          nama_jenis_layanan: controller
-                                  .listJenisLangganan?[index]
-                                  .nama_jenis_langganan ??
-                              "Jenis Langganan",
-                          desa: controller
-                                  .listJenisLangganan?[index].desa?.nama_desa ??
-                              "Desa",
-                          harga: controller.listJenisLangganan![index].harga,
-                        ),
-                      );
-                    },
-                  )),
+            ),
           ),
         ),
       ),
@@ -176,7 +213,7 @@ class CardJenisLangganan extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 10,
+          height: 3,
         ),
       ],
     );

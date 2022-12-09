@@ -1,12 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:sicatu_app/presentation/pages/keluhan_edit_page.dart';
 // import 'package:sicatu_app/presentation/pages/keluhan_maps_lokasi_penjemputan_page.dart';
 // import 'package:sicatu_app/presentation/pages/keluhan_maps_rumah_pelanggan_page.dart';
-import 'package:sicatu_app/presentation/pages/keluhan/keluhan_edit_page.dart';
-import 'package:sicatu_app/presentation/pages/keluhan/keluhan_maps_lokasi_penjemputan_page.dart';
-import 'package:sicatu_app/presentation/pages/keluhan/keluhan_maps_rumah_pelanggan_page.dart';
+import 'package:sicatu_app/presentation/pages/keluhan_page/keluhan_edit_page.dart';
+import 'package:sicatu_app/presentation/pages/keluhan_page/keluhan_maps_lokasi_penjemputan_page.dart';
+import 'package:sicatu_app/presentation/pages/keluhan_page/keluhan_maps_rumah_pelanggan_page.dart';
 
 import '../../../common/constants.dart';
 import '../../controller/keluhan_controller.dart';
@@ -24,9 +27,7 @@ class KeluhanDetailPage extends StatefulWidget {
 }
 
 class _KeluhanDetailPageState extends State<KeluhanDetailPage> {
-  var _keluhanDetailController = Get.put(KeluhanController());
-
-  final _keluhanService = Get.put(KeluhanService());
+  int roles_id = 0;
 
   @override
   void initState() {
@@ -41,6 +42,21 @@ class _KeluhanDetailPageState extends State<KeluhanDetailPage> {
       },
     );
     super.initState();
+    _loadUserData();
+  }
+
+  var _keluhanDetailController = Get.put(KeluhanController());
+
+  _loadUserData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user') ?? '');
+
+    if (user != null) {
+      setState(() {
+        roles_id = user['roles_id'];
+        print(roles_id);
+      });
+    }
   }
 
   Widget build(BuildContext context) {
@@ -205,28 +221,46 @@ class _KeluhanDetailPageState extends State<KeluhanDetailPage> {
                                           'Nama Pelanggan',
                                       style: kHeading5Putih,
                                     ),
-                                    IconButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return KeluhanEditPage();
+                                    LayoutBuilder(
+                                      builder: (context, constraints) {
+                                        if (roles_id == 1 || roles_id == 2) {
+                                          return IconButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return KeluhanEditPage();
+                                                  },
+                                                ),
+                                              );
                                             },
-                                          ),
-                                        );
+                                            icon: Icon(
+                                              Icons.edit,
+                                              size: 30,
+                                              color: Colors.white,
+                                            ),
+                                          );
+                                        } else {
+                                          return SizedBox();
+                                        }
                                       },
-                                      icon: Icon(
-                                        Icons.edit,
-                                        size: 30,
-                                        color: Colors.white,
-                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                              SizedBox(
-                                height: 9,
+                              LayoutBuilder(
+                                builder: (context, constraints) {
+                                  if (roles_id == 1 || roles_id == 2) {
+                                    return SizedBox(
+                                      height: 9,
+                                    );
+                                  } else {
+                                    return SizedBox(
+                                      height: 39,
+                                    );
+                                  }
+                                },
                               ),
                               Text(
                                 _keluhanDetailController
@@ -467,78 +501,93 @@ class _KeluhanDetailPageState extends State<KeluhanDetailPage> {
                               SizedBox(
                                 height: 16,
                               ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                height: 54,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    elevation: 0,
-                                    primary: merahColor,
-                                    minimumSize: Size(318, 44),
-                                  ),
-                                  onPressed: () {
-                                    showDialog<String>(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          AlertDialog(
-                                        title: Text(
-                                          'Hapus Keluhan',
-                                          style: kalerttittle,
+                              LayoutBuilder(
+                                builder: (context, constraints) {
+                                  if (roles_id == 1 ||
+                                      roles_id == 2 ||
+                                      roles_id == 5) {
+                                    return SizedBox(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: 54,
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 0,
+                                          primary: merahColor,
+                                          minimumSize: Size(318, 44),
                                         ),
-                                        content: Text(
-                                          'Yakin ingin hapus keluhan ini?',
-                                          style: kdescription14hitam,
-                                        ),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context, 'Hapus');
-                                            },
-                                            child: Text(
-                                              'Hapus',
+                                        onPressed: () {
+                                          showDialog<String>(
+                                            context: context,
+                                            builder: (BuildContext context) =>
+                                                AlertDialog(
+                                              title: Text(
+                                                'Hapus Keluhan',
+                                                style: kalerttittle,
+                                              ),
+                                              content: Text(
+                                                'Yakin ingin hapus keluhan ini?',
+                                                style: kdescription14hitam,
+                                              ),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                        context, 'Hapus');
+                                                  },
+                                                  child: Text(
+                                                    'Hapus',
+                                                    style: TextStyle(
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                        color: merahColor),
+                                                  ),
+                                                ),
+                                                ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    primary: biruColor,
+                                                  ),
+                                                  onPressed: () {
+                                                    Navigator.pop(
+                                                        context, 'Kembali');
+                                                  },
+                                                  child: Text('Kembali'),
+                                                )
+                                                // TextButton(
+                                                //   onPressed: () => Navigator.pop(context, 'Kembali'),
+                                                //   child: Text('Kembali'),
+                                                // ),
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Icon(
+                                              Icons.delete_outline_rounded,
+                                              color: Colors.white,
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              "Delete Keluhan",
                                               style: TextStyle(
+                                                  color: Colors.white,
                                                   decoration:
-                                                      TextDecoration.underline,
-                                                  color: merahColor),
+                                                      TextDecoration.underline),
                                             ),
-                                          ),
-                                          ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              primary: biruColor,
-                                            ),
-                                            onPressed: () {
-                                              Navigator.pop(context, 'Kembali');
-                                            },
-                                            child: Text('Kembali'),
-                                          )
-                                          // TextButton(
-                                          //   onPressed: () => Navigator.pop(context, 'Kembali'),
-                                          //   child: Text('Kembali'),
-                                          // ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     );
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.delete_outline_rounded,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                        "Delete Shift",
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            decoration:
-                                                TextDecoration.underline),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                  } else {
+                                    return SizedBox();
+                                  }
+                                },
                               ),
                               SizedBox(height: 24),
                             ],

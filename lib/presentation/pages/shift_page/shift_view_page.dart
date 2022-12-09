@@ -9,7 +9,7 @@ import 'package:sicatu_app/presentation/pages/shift_page/shift_detail_page.dart'
 import '../../../common/constants.dart';
 // import '../../common/constants.dart';
 import '../../controller/shift_controller.dart';
-import '../../service/shift_service.dart';
+
 import '../../widgets/navigation_drawer.dart';
 import '../../widgets/search_loading.dart';
 // import '../widgets/navigation_drawer.dart';
@@ -18,7 +18,6 @@ class ShiftViewPage extends StatelessWidget {
   // const ShiftViewPage({Key? key}) : super(key: key);
 
   final controller = Get.put(ShiftController());
-  final service = Get.put(ShiftService());
 
   Future<void> _pullRefresh() async {
     controller.getShift();

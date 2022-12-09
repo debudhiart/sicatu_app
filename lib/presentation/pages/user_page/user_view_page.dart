@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:sicatu_app/presentation/pages/user_create_page.dart';
 // import 'package:sicatu_app/presentation/pages/user_detail_page.dart';
 import 'package:sicatu_app/presentation/pages/user_page/user_create_page.dart';
@@ -13,28 +14,46 @@ import 'package:sicatu_app/presentation/widgets/search_loading.dart';
 
 import '../../../common/constants.dart';
 // import '../../common/constants.dart';
+import '../../controller/user_detail_controller.dart';
 import '../../controller/users_controller.dart';
 import '../../widgets/navigation_drawer.dart';
 import '../../widgets/search_empty.dart';
 
 // import '../widgets/navigation_drawer.dart';
 
-class UserViewPage extends StatelessWidget {
+class UserViewPage extends StatefulWidget {
+  @override
+  State<UserViewPage> createState() => _UserViewPageState();
+}
+
+class _UserViewPageState extends State<UserViewPage> {
   // UserViewPage({Key? key}) : super(key: key);
+
+  int roles_id = 0;
+
+  var _userDetailController = Get.put(UserDetailController());
   final controller = Get.put(UserController());
-  final service = Get.put(UserService());
 
   // final String url = 'https://covid19.mathdro.id/api';
-  // final String url = 'http://192.168.106.1:8000/api/user';
-
-  // Future getUsers() async {
-  //   var response = await http.get(Uri.parse(url));
-  //   print(json.decode(response.body));
-  //   return json.decode(response.body);
-  // }
-
   Future<void> _pullRefresh() async {
     controller.getUser();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  _loadUserData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user') ?? '');
+
+    if (user != null) {
+      setState(() {
+        roles_id = user['roles_id'];
+      });
+    }
   }
 
   @override
@@ -69,18 +88,26 @@ class UserViewPage extends StatelessWidget {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: biruColor,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return UserCreatePage();
+      floatingActionButton: LayoutBuilder(
+        builder: (context, constraints) {
+          if (roles_id == 1 || roles_id == 2) {
+            return FloatingActionButton(
+              child: Icon(Icons.add),
+              backgroundColor: biruColor,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return UserCreatePage();
+                    },
+                  ),
+                );
               },
-            ),
-          );
+            );
+          } else {
+            return SizedBox();
+          }
         },
       ),
       body: Padding(

@@ -6,7 +6,7 @@ import 'package:sicatu_app/presentation/pages/shift_page/shift_edit_page.dart';
 
 import '../../../common/constants.dart';
 import '../../controller/shift_controller.dart';
-import '../../service/shift_service.dart';
+
 import '../../widgets/search_loading.dart';
 // import '../../common/constants.dart';
 
@@ -21,8 +21,6 @@ class ShiftDetailPage extends StatefulWidget {
 
 class _ShiftDetailPageState extends State<ShiftDetailPage> {
   var _shiftDetailController = Get.put(ShiftController());
-
-  final _shiftService = Get.put(ShiftService());
 
   @override
   void initState() {

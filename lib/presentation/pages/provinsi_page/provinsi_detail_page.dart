@@ -22,8 +22,6 @@ class ProvinsiDetailPage extends StatefulWidget {
 class _ProvinsiDetailPageState extends State<ProvinsiDetailPage> {
   var _provinsiDetailController = Get.put(ProvinsiController());
 
-  final _provinsiService = Get.put(ProvinsiService());
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(

@@ -17,7 +17,6 @@ import '../../widgets/search_loading.dart';
 class JabatanViewPage extends StatelessWidget {
   // const JabatanViewPage({Key? key}) : super(key: key);
   final controller = Get.put(JabatanController());
-  final service = Get.put(JabatanService());
 
   Future<void> _pullRefresh() async {
     controller.getJabatan();

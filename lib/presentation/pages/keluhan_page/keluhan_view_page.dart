@@ -1,26 +1,56 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:sicatu_app/presentation/pages/keluhan_create_page.dart';
 // import 'package:sicatu_app/presentation/pages/keluhan_detail_page.dart';
-import 'package:sicatu_app/presentation/pages/keluhan/keluhan_create_page.dart';
-import 'package:sicatu_app/presentation/pages/keluhan/keluhan_detail_page.dart';
+import 'package:sicatu_app/presentation/pages/keluhan_page/keluhan_create_page.dart';
+import 'package:sicatu_app/presentation/pages/keluhan_page/keluhan_detail_page.dart';
 
 import '../../../common/constants.dart';
 // import '../../common/constants.dart';
 import '../../controller/keluhan_controller.dart';
+import '../../controller/user_detail_controller.dart';
 import '../../service/keluhan_service.dart';
 import '../../widgets/navigation_drawer.dart';
 import '../../widgets/search_loading.dart';
 // import '../widgets/navigation_drawer.dart';
 
-class KeluhanViewPage extends StatelessWidget {
+class KeluhanViewPage extends StatefulWidget {
+  @override
+  State<KeluhanViewPage> createState() => _KeluhanViewPageState();
+}
+
+class _KeluhanViewPageState extends State<KeluhanViewPage> {
   // const KeluhanViewPage({Key? key}) : super(key: key);
+
+  int roles_id = 0;
+
+  var _userDetailController = Get.put(UserDetailController());
+
   final controller = Get.put(KeluhanController());
-  final service = Get.put(KeluhanService());
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
 
   Future<void> _pullRefresh() async {
     controller.getKeluhan();
+  }
+
+  _loadUserData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user') ?? '');
+
+    if (user != null) {
+      setState(() {
+        roles_id = user['roles_id'];
+      });
+    }
   }
 
   @override
@@ -50,18 +80,26 @@ class KeluhanViewPage extends StatelessWidget {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: biruColor,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return KeluhanCreatePage();
+      floatingActionButton: LayoutBuilder(
+        builder: (context, constraints) {
+          if (roles_id == 1 || roles_id == 2 || roles_id == 5) {
+            return FloatingActionButton(
+              child: Icon(Icons.add),
+              backgroundColor: biruColor,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return KeluhanCreatePage();
+                    },
+                  ),
+                );
               },
-            ),
-          );
+            );
+          } else {
+            return SizedBox();
+          }
         },
       ),
       body: SafeArea(

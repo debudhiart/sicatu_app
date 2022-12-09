@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sicatu_app/common/constants.dart';
 // import 'package:sicatu_app/presentation/pages/pembayaran_create_page.dart';
 // import 'package:sicatu_app/presentation/pages/pembayaran_detail_page.dart';
@@ -9,18 +12,44 @@ import 'package:sicatu_app/presentation/pages/pembayaran_page/pembayaran_detail_
 
 // import '../../common/constants.dart';
 import '../../controller/bayar_controller.dart';
+import '../../controller/user_detail_controller.dart';
 import '../../service/bayar_service.dart';
 import '../../widgets/navigation_drawer.dart';
 import '../../widgets/search_loading.dart';
 // import '../widgets/navigation_drawer.dart';
 
-class PembayaranViewPage extends StatelessWidget {
+class PembayaranViewPage extends StatefulWidget {
+  @override
+  State<PembayaranViewPage> createState() => _PembayaranViewPageState();
+}
+
+class _PembayaranViewPageState extends State<PembayaranViewPage> {
+  int roles_id = 0;
+  // int users_id = 0;
   // const PembayaranViewPage({Key? key}) : super(key: key);
   final controller = Get.put(BayarController());
-  final service = Get.put(BayarService());
 
   Future<void> _pullRefresh() async {
     controller.getBayar();
+  }
+
+  var _userDetailController = Get.put(UserDetailController());
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  _loadUserData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user') ?? '');
+
+    if (user != null) {
+      setState(() {
+        roles_id = user['roles_id'];
+      });
+    }
   }
 
   @override
@@ -50,19 +79,29 @@ class PembayaranViewPage extends StatelessWidget {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: biruColor,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return PembayaranCreatePage();
-              },
-            ),
-          );
-        },
+      floatingActionButton: Container(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (roles_id == 1 || roles_id == 2) {
+              return FloatingActionButton(
+                child: Icon(Icons.add),
+                backgroundColor: biruColor,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return PembayaranCreatePage();
+                      },
+                    ),
+                  );
+                },
+              );
+            } else {
+              return SizedBox();
+            }
+          },
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -82,6 +121,7 @@ class PembayaranViewPage extends StatelessWidget {
                     itemCount: controller.listBayar?.length,
                     itemBuilder: (BuildContext context, int index) {
                       return CardPembayaran(
+                        pembayaran_id: controller.listBayar![index].bayar_id,
                         nama: controller
                                 .listBayar?[index].pelanggan?.nama_pelanggan ??
                             'Nama Pelanggan',
@@ -104,12 +144,13 @@ class CardPembayaran extends StatelessWidget {
   // const CardPembayaran({
   //   Key? key,
   // }) : super(key: key);
-
+  int pembayaran_id;
   String nama;
   String desa;
   String harga;
 
   CardPembayaran({
+    required this.pembayaran_id,
     required this.nama,
     required this.desa,
     required this.harga,
@@ -125,7 +166,9 @@ class CardPembayaran extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return PembayaranDetailPage();
+                  return PembayaranDetailPage(
+                    bayar_id: pembayaran_id,
+                  );
                 },
               ),
             );
@@ -166,7 +209,7 @@ class CardPembayaran extends StatelessWidget {
           ),
         ),
         SizedBox(
-          height: 10,
+          height: 4,
         ),
       ],
     );

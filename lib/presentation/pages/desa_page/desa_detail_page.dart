@@ -22,8 +22,6 @@ class DesaDetailPage extends StatefulWidget {
 class _DesaDetailPageState extends State<DesaDetailPage> {
   var _desaDetailController = Get.put(DesaController());
 
-  final _desaService = Get.put(DesaService());
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(

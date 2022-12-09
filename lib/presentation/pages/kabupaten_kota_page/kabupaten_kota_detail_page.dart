@@ -1,53 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sicatu_app/presentation/pages/jenis_langganan/jenis_langganan_edit_page.dart';
-// import 'package:sicatu_app/presentation/pages/jenis_langganan_edit_page.dart';
+import 'package:sicatu_app/presentation/controller/kabupaten_kota_controller.dart';
+import 'package:sicatu_app/presentation/pages/kabupaten_kota_page/kabupaten_kota_edit_page.dart';
 
 import '../../../common/constants.dart';
-import '../../controller/jenis_langganan_controller.dart';
-import '../../service/jenis_langganan_service.dart';
 import '../../widgets/search_loading.dart';
-// import '../../common/constants.dart';
 
-class JenisLanggananDetailPage extends StatefulWidget {
-  // const JenisLanggananDetailPage({Key? key}) : super(key: key);
-  var jenis_langganan_id;
-  JenisLanggananDetailPage({required this.jenis_langganan_id});
+class KabupatenKotaDetailPage extends StatefulWidget {
+  // const KabupatenKotaDetailPage({Key? key}) : super(key: key);
+
+  final int kabupaten_kota_id;
+  KabupatenKotaDetailPage({required this.kabupaten_kota_id});
 
   @override
-  State<JenisLanggananDetailPage> createState() =>
-      _JenisLanggananDetailPageState();
+  State<KabupatenKotaDetailPage> createState() =>
+      _KabupatenKotaDetailPageState();
 }
 
-class _JenisLanggananDetailPageState extends State<JenisLanggananDetailPage> {
-  var _jenisLanggananDetailController = Get.put(JenisLanggananController());
+class _KabupatenKotaDetailPageState extends State<KabupatenKotaDetailPage> {
+  var _kabupatenKotaDetailController = Get.put(KabupatenKotaController());
 
-  final _jenisLanggananService = Get.put(JenisLanggananService());
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
         try {
-          _jenisLanggananDetailController =
-              Get.find<JenisLanggananController>();
+          _kabupatenKotaDetailController = Get.find<KabupatenKotaController>();
         } catch (e) {
-          _jenisLanggananDetailController = Get.put(JenisLanggananController());
+          _kabupatenKotaDetailController = Get.put(KabupatenKotaController());
         }
-        await _jenisLanggananDetailController
-            .getDetailJenisLangganan(widget.jenis_langganan_id);
+        await _kabupatenKotaDetailController
+            .getDetailKabupatenKota(widget.kabupaten_kota_id);
       },
     );
     super.initState();
   }
 
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
-          'Detail Jenis Langganan',
+          'Detail Kabupaten/Kota',
           style: GoogleFonts.inter(
             color: hitamColor,
             fontSize: 22,
@@ -75,11 +70,11 @@ class _JenisLanggananDetailPageState extends State<JenisLanggananDetailPage> {
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: Text(
-                    'Hapus Jenis Langganan',
+                    'Hapus Kabupaten/Kota',
                     style: kalerttittle,
                   ),
                   content: Text(
-                    'Yakin ingin hapus jenis langganan ini?',
+                    'Yakin ingin hapus Kabupaten/Kota ini?',
                     style: kdescription14hitam,
                   ),
                   actions: <Widget>[
@@ -122,7 +117,7 @@ class _JenisLanggananDetailPageState extends State<JenisLanggananDetailPage> {
                   width: 10,
                 ),
                 Text(
-                  "Delete Jenis Langganan",
+                  "Delete Kabupaten/Kota",
                   style: TextStyle(
                       color: Colors.white,
                       decoration: TextDecoration.underline),
@@ -134,7 +129,7 @@ class _JenisLanggananDetailPageState extends State<JenisLanggananDetailPage> {
       ),
       body: SafeArea(
         child: Obx(
-          () => _jenisLanggananDetailController.isLoading.value
+          () => _kabupatenKotaDetailController.isLoading.value
               ? Center(
                   child: SearchLoading(
                     title: 'Loading Get Data Detail ',
@@ -176,10 +171,10 @@ class _JenisLanggananDetailPageState extends State<JenisLanggananDetailPage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
-                                      _jenisLanggananDetailController
-                                              .detailJenisLangganan
-                                              ?.nama_jenis_langganan ??
-                                          'Jenis Langganan',
+                                      _kabupatenKotaDetailController
+                                              .detailKabupatenKota
+                                              ?.nama_kabupaten_kota ??
+                                          'Badung',
                                       style: kHeading5Putih,
                                     ),
                                     IconButton(
@@ -188,7 +183,7 @@ class _JenisLanggananDetailPageState extends State<JenisLanggananDetailPage> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) {
-                                              return JenisLanggananEditPage();
+                                              return KabupatenKotaEditPage();
                                             },
                                           ),
                                         );
@@ -206,21 +201,11 @@ class _JenisLanggananDetailPageState extends State<JenisLanggananDetailPage> {
                                 height: 9,
                               ),
                               Text(
-                                _jenisLanggananDetailController
-                                        .detailJenisLangganan
-                                        ?.desa
-                                        ?.nama_desa ??
-                                    "Desa",
-                                style: kBodyText,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                _jenisLanggananDetailController
-                                        .detailJenisLangganan?.harga
-                                        .toString() ??
-                                    "Harga",
+                                _kabupatenKotaDetailController
+                                        .detailKabupatenKota
+                                        ?.provinsi
+                                        ?.nama_provinsi ??
+                                    "Provinsi",
                                 style: kBodyText,
                               ),
                             ],

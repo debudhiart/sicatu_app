@@ -1,22 +1,51 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sicatu_app/presentation/controller/provinsi_controller.dart';
 import 'package:sicatu_app/presentation/pages/provinsi_page/provinsi_create_page.dart';
 import 'package:sicatu_app/presentation/pages/provinsi_page/provinsi_detail_page.dart';
 import 'package:sicatu_app/presentation/service/provinsi_service.dart';
 
 import '../../../common/constants.dart';
+import '../../controller/user_detail_controller.dart';
 import '../../widgets/navigation_drawer.dart';
 import '../../widgets/search_loading.dart';
 
-class ProvinsiViewPage extends StatelessWidget {
+class ProvinsiViewPage extends StatefulWidget {
+  @override
+  State<ProvinsiViewPage> createState() => _ProvinsiViewPageState();
+}
+
+class _ProvinsiViewPageState extends State<ProvinsiViewPage> {
+  int roles_id = 0;
+
+  var _userDetailController = Get.put(UserDetailController());
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
   // const ProvinsiViewPage({Key? key}) : super(key: key);
   final controller = Get.put(ProvinsiController());
-  final service = Get.put(ProvinsiService());
 
   Future<void> _pullRefresh() async {
     controller.getProvinsi();
+  }
+
+  _loadUserData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user') ?? '');
+
+    if (user != null) {
+      setState(() {
+        roles_id = user['roles_id'];
+      });
+    }
   }
 
   @override
@@ -45,18 +74,26 @@ class ProvinsiViewPage extends StatelessWidget {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: biruColor,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return ProvinsiCreatePage();
+      floatingActionButton: LayoutBuilder(
+        builder: (context, constraints) {
+          if (roles_id == 1) {
+            return FloatingActionButton(
+              child: Icon(Icons.add),
+              backgroundColor: biruColor,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return ProvinsiCreatePage();
+                    },
+                  ),
+                );
               },
-            ),
-          );
+            );
+          } else {
+            return SizedBox();
+          }
         },
       ),
       body: SafeArea(

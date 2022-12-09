@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:sicatu_app/presentation/pages/desa_create_page.dart';
 // import 'package:sicatu_app/presentation/pages/desa_detail_page.dart';
 import 'package:sicatu_app/presentation/pages/desa_page/desa_create_page.dart';
@@ -9,19 +12,44 @@ import 'package:sicatu_app/presentation/pages/desa_page/desa_detail_page.dart';
 import '../../../common/constants.dart';
 // import '../../common/constants.dart';
 import '../../controller/desa_controller.dart';
+import '../../controller/user_detail_controller.dart';
 import '../../service/desa_service.dart';
 import '../../widgets/navigation_drawer.dart';
 import '../../widgets/search_loading.dart';
 // import '../widgets/navigation_drawer.dart';
 
-class DesaViewPage extends StatelessWidget {
-  // const DesaViewPage({Key? key}) : super(key: key);
+class DesaViewPage extends StatefulWidget {
+  @override
+  State<DesaViewPage> createState() => _DesaViewPageState();
+}
 
+class _DesaViewPageState extends State<DesaViewPage> {
+  int roles_id = 0;
+
+  var _userDetailController = Get.put(UserDetailController());
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  // const DesaViewPage({Key? key}) : super(key: key);
   final controller = Get.put(DesaController());
-  final service = Get.put(DesaService());
 
   Future<void> _pullRefresh() async {
     controller.getDesa();
+  }
+
+  _loadUserData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user') ?? '');
+
+    if (user != null) {
+      setState(() {
+        roles_id = user['roles_id'];
+      });
+    }
   }
 
   @override
@@ -53,20 +81,31 @@ class DesaViewPage extends StatelessWidget {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        backgroundColor: biruColor,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return DesaCreatePage();
-              },
-            ),
-          );
-        },
+      floatingActionButton: Container(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            if (roles_id == 1) {
+              return FloatingActionButton(
+                child: Icon(Icons.add),
+                backgroundColor: biruColor,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return DesaCreatePage();
+                      },
+                    ),
+                  );
+                },
+              );
+            } else {
+              return SizedBox();
+            }
+          },
+        ),
       ),
+
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

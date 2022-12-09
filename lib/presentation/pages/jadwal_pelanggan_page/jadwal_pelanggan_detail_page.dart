@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:sicatu_app/presentation/pages/jadwal_pelanggan_edit_page.dart';
 import 'package:sicatu_app/presentation/pages/jadwal_pelanggan_page/jadwal_pelanggan_edit_page.dart';
 
 import '../../../common/constants.dart';
 import '../../controller/jadwal_pelanggan_controller.dart';
+import '../../controller/user_detail_controller.dart';
 import '../../service/jadwal_pelanggan_service.dart';
 import '../../widgets/search_loading.dart';
 // import '../../common/constants.dart';
@@ -22,9 +26,12 @@ class JadwalPelangganDetailPage extends StatefulWidget {
 }
 
 class _JadwalPelangganDetailPageState extends State<JadwalPelangganDetailPage> {
+  int roles_id = 0;
+
+  var _userDetailController = Get.put(UserDetailController());
+
   var _jadwalPelangganDetailController = Get.put(JadwalPelangganController());
 
-  final _jadwalPelangganService = Get.put(JadwalPelangganService());
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(
@@ -41,6 +48,18 @@ class _JadwalPelangganDetailPageState extends State<JadwalPelangganDetailPage> {
       },
     );
     super.initState();
+    _loadUserData();
+  }
+
+  _loadUserData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user') ?? '');
+
+    if (user != null) {
+      setState(() {
+        roles_id = user['roles_id'];
+      });
+    }
   }
 
   @override
@@ -61,78 +80,86 @@ class _JadwalPelangganDetailPageState extends State<JadwalPelangganDetailPage> {
         elevation: 0,
         iconTheme: IconThemeData(color: biruColor),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 54,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              primary: merahColor,
-              minimumSize: Size(318, 44),
-            ),
-            onPressed: () {
-              showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  title: Text(
-                    'Hapus Jadwal Pelanggan',
-                    style: kalerttittle,
+      bottomNavigationBar: LayoutBuilder(
+        builder: (context, constraints) {
+          if (roles_id == 1 || roles_id == 2) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 54,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    primary: merahColor,
+                    minimumSize: Size(318, 44),
                   ),
-                  content: Text(
-                    'Yakin ingin hapus jadwal pelanggan ini?',
-                    style: kdescription14hitam,
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context, 'Hapus');
-                      },
-                      child: Text(
-                        'Hapus',
+                  onPressed: () {
+                    showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: Text(
+                          'Hapus Jadwal Pelanggan',
+                          style: kalerttittle,
+                        ),
+                        content: Text(
+                          'Yakin ingin hapus jadwal pelanggan ini?',
+                          style: kdescription14hitam,
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, 'Hapus');
+                            },
+                            child: Text(
+                              'Hapus',
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  color: merahColor),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: biruColor,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context, 'Kembali');
+                            },
+                            child: Text('Kembali'),
+                          )
+                          // TextButton(
+                          //   onPressed: () => Navigator.pop(context, 'Kembali'),
+                          //   child: Text('Kembali'),
+                          // ),
+                        ],
+                      ),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.delete_outline_rounded,
+                        color: Colors.white,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Delete Jadwal Pelanggan",
                         style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: merahColor),
+                            color: Colors.white,
+                            decoration: TextDecoration.underline),
                       ),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: biruColor,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context, 'Kembali');
-                      },
-                      child: Text('Kembali'),
-                    )
-                    // TextButton(
-                    //   onPressed: () => Navigator.pop(context, 'Kembali'),
-                    //   child: Text('Kembali'),
-                    // ),
-                  ],
+                    ],
+                  ),
                 ),
-              );
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                  Icons.delete_outline_rounded,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  "Delete Jadwal Pelanggan",
-                  style: TextStyle(
-                      color: Colors.white,
-                      decoration: TextDecoration.underline),
-                ),
-              ],
-            ),
-          ),
-        ),
+              ),
+            );
+          } else {
+            return SizedBox();
+          }
+        },
       ),
       body: SafeArea(
         child: Obx(
@@ -185,28 +212,46 @@ class _JadwalPelangganDetailPageState extends State<JadwalPelangganDetailPage> {
                                           'Nama',
                                       style: kHeading5Putih,
                                     ),
-                                    IconButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return JadwalPelangganEditPage();
+                                    LayoutBuilder(
+                                      builder: (context, constraints) {
+                                        if (roles_id == 1 || roles_id == 2) {
+                                          return IconButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return JadwalPelangganEditPage();
+                                                  },
+                                                ),
+                                              );
                                             },
-                                          ),
-                                        );
+                                            icon: Icon(
+                                              Icons.edit,
+                                              size: 30,
+                                              color: Colors.white,
+                                            ),
+                                          );
+                                        } else {
+                                          return SizedBox();
+                                        }
                                       },
-                                      icon: Icon(
-                                        Icons.edit,
-                                        size: 30,
-                                        color: Colors.white,
-                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                              SizedBox(
-                                height: 9,
+                              LayoutBuilder(
+                                builder: (context, constraints) {
+                                  if (roles_id == 1 || roles_id == 2) {
+                                    return SizedBox(
+                                      height: 9,
+                                    );
+                                  } else {
+                                    return SizedBox(
+                                      height: 39,
+                                    );
+                                  }
+                                },
                               ),
                               Text(
                                 _jadwalPelangganDetailController

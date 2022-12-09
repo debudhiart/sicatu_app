@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sicatu_app/data/datasources/models/user.dart';
 import 'package:sicatu_app/presentation/controller/users_controller.dart';
 // import 'package:sicatu_app/presentation/pages/user_edit_profile_page.dart';
@@ -11,6 +14,7 @@ import 'package:sicatu_app/presentation/service/user_service.dart';
 import 'package:sicatu_app/presentation/widgets/search_loading.dart';
 
 import '../../../common/constants.dart';
+import '../../controller/user_detail_controller.dart';
 // import '../../common/constants.dart';
 
 class UserDetailPage extends StatefulWidget {
@@ -25,22 +29,35 @@ class UserDetailPage extends StatefulWidget {
 }
 
 class _UserDetailPageState extends State<UserDetailPage> {
-  var _userDetailController = Get.put(UserController());
-  final _userService = Get.put(UserService());
+  int roles_id = 0;
+
+  var _userDetailController = Get.put(UserDetailController());
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
         try {
-          _userDetailController = Get.find<UserController>();
+          _userDetailController = Get.find<UserDetailController>();
         } catch (e) {
-          _userDetailController = Get.put(UserController());
+          _userDetailController = Get.put(UserDetailController());
         }
         await _userDetailController.getDetailUser(widget.users_id);
       },
     );
+    _loadUserData();
     super.initState();
+  }
+
+  _loadUserData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user') ?? '');
+
+    if (user != null) {
+      setState(() {
+        roles_id = user['roles_id'];
+      });
+    }
   }
 
   Widget build(BuildContext context) {
@@ -107,29 +124,48 @@ class _UserDetailPageState extends State<UserDetailPage> {
                                     backgroundColor: Colors.white,
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 16.0),
-                                  child: IconButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return UserEditProfilePage();
+                                LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    if (roles_id == 1 || roles_id == 2) {
+                                      return Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 16.0),
+                                        child: IconButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return UserEditProfilePage();
+                                                  },
+                                                ),
+                                              );
                                             },
-                                          ),
-                                        );
-                                      },
-                                      icon: Icon(
-                                        Icons.edit,
-                                        size: 30,
-                                        color: Colors.white,
-                                      )),
-                                )
+                                            icon: Icon(
+                                              Icons.edit,
+                                              size: 30,
+                                              color: Colors.white,
+                                            )),
+                                      );
+                                    } else {
+                                      return SizedBox();
+                                    }
+                                  },
+                                ),
                               ],
                             ),
-                            SizedBox(
-                              height: 33,
+                            LayoutBuilder(
+                              builder: (context, constraints) {
+                                if (roles_id == 1 || roles_id == 2) {
+                                  return SizedBox(
+                                    height: 9,
+                                  );
+                                } else {
+                                  return SizedBox(
+                                    height: 33,
+                                  );
+                                }
+                              },
                             ),
                             Text(
                               _userDetailController.detailUser?.nama ?? "Nama",
@@ -169,6 +205,9 @@ class _UserDetailPageState extends State<UserDetailPage> {
                                   "Role",
                               style: kBodyText,
                             ),
+                            SizedBox(
+                              height: 9,
+                            ),
                             LayoutBuilder(
                               builder: (context, constraints) {
                                 if (_userDetailController
@@ -178,17 +217,11 @@ class _UserDetailPageState extends State<UserDetailPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      SizedBox(
-                                        height: 9,
-                                      ),
                                       Text(
                                         _userDetailController
                                                 .detailUser?.pelanggan?.hp ??
                                             "No Hp Pelanggan",
                                         style: kBodyText,
-                                      ),
-                                      SizedBox(
-                                        height: 9,
                                       ),
                                     ],
                                   );
@@ -199,17 +232,11 @@ class _UserDetailPageState extends State<UserDetailPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      SizedBox(
-                                        height: 9,
-                                      ),
                                       Text(
                                         _userDetailController
                                                 .detailUser?.operator?.hp ??
                                             "No Hp Operator",
                                         style: kBodyText,
-                                      ),
-                                      SizedBox(
-                                        height: 9,
                                       ),
                                     ],
                                   );
@@ -220,26 +247,21 @@ class _UserDetailPageState extends State<UserDetailPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      SizedBox(
-                                        height: 9,
-                                      ),
                                       Text(
                                         _userDetailController
                                                 .detailUser?.petugas?.hp ??
                                             "No Hp Petugas",
                                         style: kBodyText,
                                       ),
-                                      SizedBox(
-                                        height: 9,
-                                      ),
                                     ],
                                   );
                                 } else {
-                                  return SizedBox(
-                                    height: 9,
-                                  );
+                                  return SizedBox();
                                 }
                               },
+                            ),
+                            SizedBox(
+                              height: 9,
                             ),
                             LayoutBuilder(
                               builder: (context, constraints) {
@@ -279,10 +301,19 @@ class _UserDetailPageState extends State<UserDetailPage> {
                                           child: Text("Lihat Lokasi Rumah"),
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 22,
-                                      ),
+                                      SizedBox(),
                                     ],
+                                  );
+                                } else {
+                                  return SizedBox();
+                                }
+                              },
+                            ),
+                            LayoutBuilder(
+                              builder: (context, constraints) {
+                                if (roles_id == 1 || roles_id == 2) {
+                                  return SizedBox(
+                                    height: 9,
                                   );
                                 } else {
                                   return SizedBox(
@@ -291,77 +322,89 @@ class _UserDetailPageState extends State<UserDetailPage> {
                                 }
                               },
                             ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: 54,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 0,
-                                  primary: merahColor,
-                                  minimumSize: Size(318, 44),
-                                ),
-                                onPressed: () {
-                                  showDialog<String>(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        AlertDialog(
-                                      title: Text(
-                                        'Hapus User',
-                                        style: kalerttittle,
+                            LayoutBuilder(
+                              builder: (context, constraints) {
+                                if (roles_id == 1 || roles_id == 2) {
+                                  return SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 54,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        elevation: 0,
+                                        primary: merahColor,
+                                        minimumSize: Size(318, 44),
                                       ),
-                                      content: Text(
-                                        'Yakin ingin hapus user ini?',
-                                        style: kdescription14hitam,
-                                      ),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.pop(context, 'Hapus');
-                                          },
-                                          child: Text(
-                                            'Hapus',
+                                      onPressed: () {
+                                        showDialog<String>(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              AlertDialog(
+                                            title: Text(
+                                              'Hapus User',
+                                              style: kalerttittle,
+                                            ),
+                                            content: Text(
+                                              'Yakin ingin hapus user ini?',
+                                              style: kdescription14hitam,
+                                            ),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(
+                                                      context, 'Hapus');
+                                                },
+                                                child: Text(
+                                                  'Hapus',
+                                                  style: TextStyle(
+                                                      decoration: TextDecoration
+                                                          .underline,
+                                                      color: merahColor),
+                                                ),
+                                              ),
+                                              ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                  primary: biruColor,
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.pop(
+                                                      context, 'Kembali');
+                                                },
+                                                child: Text('Kembali'),
+                                              )
+                                              // TextButton(
+                                              //   onPressed: () => Navigator.pop(context, 'Kembali'),
+                                              //   child: Text('Kembali'),
+                                              // ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.delete_outline_rounded,
+                                            color: Colors.white,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            "Delete Shift",
                                             style: TextStyle(
+                                                color: Colors.white,
                                                 decoration:
-                                                    TextDecoration.underline,
-                                                color: merahColor),
+                                                    TextDecoration.underline),
                                           ),
-                                        ),
-                                        ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                            primary: biruColor,
-                                          ),
-                                          onPressed: () {
-                                            Navigator.pop(context, 'Kembali');
-                                          },
-                                          child: Text('Kembali'),
-                                        )
-                                        // TextButton(
-                                        //   onPressed: () => Navigator.pop(context, 'Kembali'),
-                                        //   child: Text('Kembali'),
-                                        // ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   );
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: <Widget>[
-                                    Icon(
-                                      Icons.delete_outline_rounded,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "Delete Shift",
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          decoration: TextDecoration.underline),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                                } else {
+                                  return SizedBox();
+                                }
+                              },
                             ),
                           ],
                         ),

@@ -1,38 +1,60 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:sicatu_app/presentation/pages/kecamatan/kecamatan_edit_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sicatu_app/presentation/pages/jenis_langganan_page/jenis_langganan_edit_page.dart';
+// import 'package:sicatu_app/presentation/pages/jenis_langganan_edit_page.dart';
 
 import '../../../common/constants.dart';
-import '../../controller/kecamatan_controller.dart';
+import '../../controller/jenis_langganan_controller.dart';
+import '../../service/jenis_langganan_service.dart';
 import '../../widgets/search_loading.dart';
+// import '../../common/constants.dart';
 
-class KecamatanDetailPage extends StatefulWidget {
-  // const KecamatanDetailPage({Key? key}) : super(key: key);
-  final int kecamatan_id;
-  KecamatanDetailPage({required this.kecamatan_id});
+class JenisLanggananDetailPage extends StatefulWidget {
+  // const JenisLanggananDetailPage({Key? key}) : super(key: key);
+  var jenis_langganan_id;
+  JenisLanggananDetailPage({required this.jenis_langganan_id});
 
   @override
-  State<KecamatanDetailPage> createState() => _KecamatanDetailPageState();
+  State<JenisLanggananDetailPage> createState() =>
+      _JenisLanggananDetailPageState();
 }
 
-class _KecamatanDetailPageState extends State<KecamatanDetailPage> {
-  var _kecamatanDetailController = Get.put(KecamatanController());
-  final _kecamatanController = Get.put(KecamatanController());
+class _JenisLanggananDetailPageState extends State<JenisLanggananDetailPage> {
+  int roles_id = 0;
 
+  var _jenisLanggananDetailController = Get.put(JenisLanggananController());
+
+  @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
         try {
-          _kecamatanDetailController = Get.find<KecamatanController>();
+          _jenisLanggananDetailController =
+              Get.find<JenisLanggananController>();
         } catch (e) {
-          _kecamatanDetailController = Get.put(KecamatanController());
+          _jenisLanggananDetailController = Get.put(JenisLanggananController());
         }
-        await _kecamatanDetailController
-            .getDetailKecamatan(widget.kecamatan_id);
+        await _jenisLanggananDetailController
+            .getDetailJenisLangganan(widget.jenis_langganan_id);
       },
     );
     super.initState();
+    _loadUserData();
+  }
+
+  _loadUserData() async {
+    SharedPreferences localStorage = await SharedPreferences.getInstance();
+    var user = jsonDecode(localStorage.getString('user') ?? '');
+
+    if (user != null) {
+      setState(() {
+        roles_id = user['roles_id'];
+      });
+    }
   }
 
   @override
@@ -41,7 +63,7 @@ class _KecamatanDetailPageState extends State<KecamatanDetailPage> {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
-          'Detail Kecamatan',
+          'Detail Jenis Langganan',
           style: GoogleFonts.inter(
             color: hitamColor,
             fontSize: 22,
@@ -69,11 +91,11 @@ class _KecamatanDetailPageState extends State<KecamatanDetailPage> {
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: Text(
-                    'Hapus Kecamatan',
+                    'Hapus Jenis Langganan',
                     style: kalerttittle,
                   ),
                   content: Text(
-                    'Yakin ingin hapus Kecamatan ini?',
+                    'Yakin ingin hapus jenis langganan ini?',
                     style: kdescription14hitam,
                   ),
                   actions: <Widget>[
@@ -116,7 +138,7 @@ class _KecamatanDetailPageState extends State<KecamatanDetailPage> {
                   width: 10,
                 ),
                 Text(
-                  "Delete Kecamatan",
+                  "Delete Jenis Langganan",
                   style: TextStyle(
                       color: Colors.white,
                       decoration: TextDecoration.underline),
@@ -128,10 +150,10 @@ class _KecamatanDetailPageState extends State<KecamatanDetailPage> {
       ),
       body: SafeArea(
         child: Obx(
-          () => _kecamatanDetailController.isLoading.value
+          () => _jenisLanggananDetailController.isLoading.value
               ? Center(
                   child: SearchLoading(
-                    title: 'Loading Get Data Kecamatan',
+                    title: 'Loading Get Data Detail ',
                     subtitle: '',
                   ),
                   // CircularProgressIndicator(),
@@ -170,50 +192,69 @@ class _KecamatanDetailPageState extends State<KecamatanDetailPage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Text(
-                                      _kecamatanDetailController.detailKecamatan
-                                              ?.nama_kecamatan ??
-                                          'Kecamatan',
+                                      _jenisLanggananDetailController
+                                              .detailJenisLangganan
+                                              ?.nama_jenis_langganan ??
+                                          'Jenis Langganan',
                                       style: kHeading5Putih,
                                     ),
-                                    IconButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) {
-                                              return KecamatanEditPage();
+                                    LayoutBuilder(
+                                      builder: (context, constraints) {
+                                        if (roles_id == 1 || roles_id == 2) {
+                                          return IconButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) {
+                                                    return JenisLanggananEditPage();
+                                                  },
+                                                ),
+                                              );
                                             },
-                                          ),
-                                        );
+                                            icon: Icon(
+                                              Icons.edit,
+                                              size: 30,
+                                              color: Colors.white,
+                                            ),
+                                          );
+                                        } else {
+                                          return SizedBox();
+                                        }
                                       },
-                                      icon: Icon(
-                                        Icons.edit,
-                                        size: 30,
-                                        color: Colors.white,
-                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                              SizedBox(
-                                height: 9,
+                              LayoutBuilder(
+                                builder: (context, constraints) {
+                                  if (roles_id == 1 || roles_id == 2) {
+                                    return SizedBox(
+                                      height: 9,
+                                    );
+                                  } else {
+                                    return SizedBox(
+                                      height: 39,
+                                    );
+                                  }
+                                },
                               ),
                               Text(
-                                _kecamatanDetailController.detailKecamatan
-                                        ?.kabupaten_kota?.nama_kabupaten_kota ??
-                                    "Kabupaten Kota",
+                                _jenisLanggananDetailController
+                                        .detailJenisLangganan
+                                        ?.desa
+                                        ?.nama_desa ??
+                                    "Desa",
                                 style: kBodyText,
                               ),
                               SizedBox(
                                 height: 10,
                               ),
                               Text(
-                                _kecamatanDetailController
-                                        .detailKecamatan
-                                        ?.kabupaten_kota
-                                        ?.provinsi
-                                        ?.nama_provinsi ??
-                                    "Provinsi",
+                                _jenisLanggananDetailController
+                                        .detailJenisLangganan?.harga
+                                        .toString() ??
+                                    "Harga",
                                 style: kBodyText,
                               ),
                             ],

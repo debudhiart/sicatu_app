@@ -6,6 +6,7 @@ import '../../data/datasources/models/bayar.dart';
 import '../service/bayar_service.dart';
 
 class BayarController extends GetxController {
+  Bayar? detailBayar;
   List<Bayar>? listBayar;
   RxBool isLoading = false.obs;
 
@@ -22,5 +23,13 @@ class BayarController extends GetxController {
     listBayar = await service.getBayarService();
     isLoading.value = false;
     return listBayar;
+  }
+
+  Future<Bayar?> getDetailBayar(int id) async {
+    isLoading.value = true;
+    detailBayar = await service.getDetailBayarService(id);
+    isLoading.value = false;
+    print(detailBayar);
+    return detailBayar;
   }
 }

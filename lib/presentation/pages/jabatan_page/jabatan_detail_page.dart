@@ -22,7 +22,6 @@ class JabatanDetailPage extends StatefulWidget {
 class _JabatanDetailPageState extends State<JabatanDetailPage> {
   var _jabatanDetailController = Get.put(JabatanController());
 
-  final _jabatanService = Get.put(JabatanService());
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback(
