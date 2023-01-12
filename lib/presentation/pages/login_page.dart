@@ -54,14 +54,14 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
                 Text(
-                  "SICATU: Pengelolaan Sampah",
+                  "Sistem Informasi Akuntabilitas",
                   style: kHeading5,
                 ),
                 SizedBox(
                   height: 9,
                 ),
                 Text(
-                  "Sistem Informasi Catatan Akuntabilitas Transparansi Usaha Transparansi Usaha",
+                  "Transparansi Usaha Pengelolaan Sampah",
                   style: kBodyText,
                 ),
                 SizedBox(

@@ -104,6 +104,7 @@ class _WilayahPageState extends State<WilayahPage> {
                         child: WilayahListCard(
                           icon: Icons.villa,
                           title: "Desa",
+                          roles_id: roles_id,
                         ),
                       ),
                       SizedBox(
@@ -123,6 +124,7 @@ class _WilayahPageState extends State<WilayahPage> {
                         child: WilayahListCard(
                           icon: Icons.business_outlined,
                           title: "Kecamatan",
+                          roles_id: roles_id,
                         ),
                       ),
                       SizedBox(
@@ -141,7 +143,8 @@ class _WilayahPageState extends State<WilayahPage> {
                         },
                         child: WilayahListCard(
                           icon: Icons.house_siding_outlined,
-                          title: "Kabupaten dan Kota",
+                          title: "Kabupaten/Kota",
+                          roles_id: roles_id,
                         ),
                       ),
                       SizedBox(
@@ -161,6 +164,7 @@ class _WilayahPageState extends State<WilayahPage> {
                         child: WilayahListCard(
                           icon: Icons.water_damage_outlined,
                           title: "Provinsi",
+                          roles_id: roles_id,
                         ),
                       ),
                     ],
@@ -178,31 +182,81 @@ class _WilayahPageState extends State<WilayahPage> {
                         : Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                _desaDetailController.detailDesa?.nama_desa ??
+                              WilayahListCard(
+                                icon: Icons.villa,
+                                title: _desaDetailController
+                                        .detailDesa?.nama_desa ??
                                     "Desa",
+                                roles_id: roles_id,
                               ),
-                              Text(
-                                _desaDetailController.detailDesa?.kecamatan
-                                        ?.nama_kecamatan ??
+                              SizedBox(
+                                height: 22,
+                              ),
+                              WilayahListCard(
+                                icon: Icons.business_outlined,
+                                title: _desaDetailController.detailDesa
+                                        ?.kecamatan?.nama_kecamatan ??
                                     "Kecamatan",
+                                roles_id: roles_id,
                               ),
-                              Text(
-                                _desaDetailController.detailDesa?.kecamatan
-                                        ?.kabupaten_kota?.nama_kabupaten_kota ??
+                              SizedBox(
+                                height: 22,
+                              ),
+                              WilayahListCard(
+                                icon: Icons.house_siding_outlined,
+                                title: _desaDetailController
+                                        .detailDesa
+                                        ?.kecamatan
+                                        ?.kabupaten_kota
+                                        ?.nama_kabupaten_kota ??
                                     "Kabupaten Kota",
+                                roles_id: roles_id,
                               ),
-                              Text(
-                                _desaDetailController
+                              SizedBox(
+                                height: 22,
+                              ),
+                              WilayahListCard(
+                                icon: Icons.water_damage_outlined,
+                                title: _desaDetailController
                                         .detailDesa
                                         ?.kecamatan
                                         ?.kabupaten_kota
                                         ?.provinsi
                                         ?.nama_provinsi ??
                                     "Provinsi",
+                                roles_id: roles_id,
                               ),
                             ],
                           ),
+
+                    // Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       Text(
+                    //         _desaDetailController.detailDesa?.nama_desa ??
+                    //             "Desa",
+                    //       ),
+                    //       Text(
+                    //         _desaDetailController.detailDesa?.kecamatan
+                    //                 ?.nama_kecamatan ??
+                    //             "Kecamatan",
+                    //       ),
+                    //       Text(
+                    //         _desaDetailController.detailDesa?.kecamatan
+                    //                 ?.kabupaten_kota?.nama_kabupaten_kota ??
+                    //             "Kabupaten Kota",
+                    //       ),
+                    //       Text(
+                    //         _desaDetailController
+                    //                 .detailDesa
+                    //                 ?.kecamatan
+                    //                 ?.kabupaten_kota
+                    //                 ?.provinsi
+                    //                 ?.nama_provinsi ??
+                    //             "Provinsi",
+                    //       ),
+                    //     ],
+                    //   ),
                   );
                 }
               },

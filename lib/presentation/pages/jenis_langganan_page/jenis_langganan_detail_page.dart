@@ -75,78 +75,86 @@ class _JenisLanggananDetailPageState extends State<JenisLanggananDetailPage> {
         elevation: 0,
         iconTheme: IconThemeData(color: biruColor),
       ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: 54,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              primary: merahColor,
-              minimumSize: Size(318, 44),
-            ),
-            onPressed: () {
-              showDialog<String>(
-                context: context,
-                builder: (BuildContext context) => AlertDialog(
-                  title: Text(
-                    'Hapus Jenis Langganan',
-                    style: kalerttittle,
+      bottomNavigationBar: LayoutBuilder(
+        builder: (context, constraints) {
+          if (roles_id == 1 || roles_id == 2) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 54,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    primary: merahColor,
+                    minimumSize: Size(318, 44),
                   ),
-                  content: Text(
-                    'Yakin ingin hapus jenis langganan ini?',
-                    style: kdescription14hitam,
-                  ),
-                  actions: <Widget>[
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context, 'Hapus');
-                      },
-                      child: Text(
-                        'Hapus',
+                  onPressed: () {
+                    showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: Text(
+                          'Hapus Jenis Langganan',
+                          style: kalerttittle,
+                        ),
+                        content: Text(
+                          'Yakin ingin hapus jenis langganan ini?',
+                          style: kdescription14hitam,
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context, 'Hapus');
+                            },
+                            child: Text(
+                              'Hapus',
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline,
+                                  color: merahColor),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: biruColor,
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context, 'Kembali');
+                            },
+                            child: Text('Kembali'),
+                          )
+                          // TextButton(
+                          //   onPressed: () => Navigator.pop(context, 'Kembali'),
+                          //   child: Text('Kembali'),
+                          // ),
+                        ],
+                      ),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Icon(
+                        Icons.delete_outline_rounded,
+                        color: Colors.white,
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        "Delete Jenis Langganan",
                         style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: merahColor),
+                            color: Colors.white,
+                            decoration: TextDecoration.underline),
                       ),
-                    ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: biruColor,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(context, 'Kembali');
-                      },
-                      child: Text('Kembali'),
-                    )
-                    // TextButton(
-                    //   onPressed: () => Navigator.pop(context, 'Kembali'),
-                    //   child: Text('Kembali'),
-                    // ),
-                  ],
+                    ],
+                  ),
                 ),
-              );
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Icon(
-                  Icons.delete_outline_rounded,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  "Delete Jenis Langganan",
-                  style: TextStyle(
-                      color: Colors.white,
-                      decoration: TextDecoration.underline),
-                ),
-              ],
-            ),
-          ),
-        ),
+              ),
+            );
+          } else {
+            return SizedBox();
+          }
+        },
       ),
       body: SafeArea(
         child: Obx(

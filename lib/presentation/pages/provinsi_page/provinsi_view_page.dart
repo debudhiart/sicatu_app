@@ -40,6 +40,7 @@ class _ProvinsiViewPageState extends State<ProvinsiViewPage> {
   _loadUserData() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var user = jsonDecode(localStorage.getString('user') ?? '');
+    await controller.getProvinsi();
 
     if (user != null) {
       setState(() {
@@ -114,33 +115,34 @@ class _ProvinsiViewPageState extends State<ProvinsiViewPage> {
                   : ListView.builder(
                       itemCount: controller.listProvinsi?.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return GridView.count(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          crossAxisCount: 2,
-                          childAspectRatio: 3 / 2,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 10,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ProvinsiDetailPage(
-                                        provinsi_id: controller
-                                            .listProvinsi![index].provinsi_id),
-                                  ),
-                                );
-                              },
-                              child: CardProvinsi(
-                                provinsi: controller
-                                        .listProvinsi?[index].nama_provinsi ??
-                                    "Provinsi",
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProvinsiDetailPage(
+                                    provinsi_id: controller
+                                        .listProvinsi![index].provinsi_id),
                               ),
-                            ),
-                          ],
+                            );
+                          },
+                          child: CardProvinsi(
+                            provinsi:
+                                controller.listProvinsi?[index].nama_provinsi ??
+                                    "Provinsi",
+                          ),
                         );
+                        // GridView.count(
+                        //   physics: NeverScrollableScrollPhysics(),
+                        //   shrinkWrap: true,
+                        //   crossAxisCount: 2,
+                        //   childAspectRatio: 3 / 2,
+                        //   crossAxisSpacing: 12,
+                        //   mainAxisSpacing: 10,
+                        //   children: <Widget>[
+
+                        //   ],
+                        // );
                         // Text(snapshot.data['data'][index]['nama'])
                       },
                     ),
@@ -165,21 +167,24 @@ class CardProvinsi extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(4),
-      child: Card(
-        color: softBlueColor,
-        elevation: 3,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                provinsi,
-                style: ktittle,
-              ),
-            ],
+    return Container(
+      height: 100,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(4),
+        child: Card(
+          color: softBlueColor,
+          elevation: 3,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  provinsi,
+                  style: ktittle,
+                ),
+              ],
+            ),
           ),
         ),
       ),

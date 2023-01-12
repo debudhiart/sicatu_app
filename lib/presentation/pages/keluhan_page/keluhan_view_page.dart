@@ -82,7 +82,7 @@ class _KeluhanViewPageState extends State<KeluhanViewPage> {
       ),
       floatingActionButton: LayoutBuilder(
         builder: (context, constraints) {
-          if (roles_id == 1 || roles_id == 2 || roles_id == 5) {
+          if (roles_id == 5) {
             return FloatingActionButton(
               child: Icon(Icons.add),
               backgroundColor: biruColor,

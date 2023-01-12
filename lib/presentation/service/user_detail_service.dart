@@ -11,26 +11,6 @@ class UserDetailService {
   final String url = 'http://192.168.106.1:8000/api/user';
 
   Future<UserDetail> getDetailUserService(int id) async {
-    // try {
-    //   // final uri = Uri.parse('http://ip-api.com/json/$ipAddress');
-    //   // final response = await http.get(uri);
-
-    //   var response = await http.get(
-    //     Uri.parse('$url/$id'),
-    //     headers: setHeaders(),
-    //   );
-
-    //   switch (response.statusCode) {
-    //     case 200:
-    //       var data = json.decode(response.body);
-    //       return UserDetail.fromJson(data["data"]);
-    //     default:
-    //       throw Exception(response.reasonPhrase);
-    //   }
-    // } on SocketException catch (_) {
-    //   // make it explicit that a SocketException will be thrown if the network connection fails
-    //   rethrow;
-    // }
     await getToken();
     var response = await http.get(
       Uri.parse('$url/$id'),
@@ -40,5 +20,37 @@ class UserDetailService {
     var data = json.decode(response.body);
 
     return UserDetail.fromJson(data["data"]);
+  }
+
+  Future editDataUser(int id, int desa_id, String nama, String email,
+      String address, String hp) async {
+    final response = await http.post(
+        Uri.parse(
+          '$url/edit/$id',
+        ),
+        headers: setHeaders(),
+        body: jsonEncode({
+          // "roles_id": roles_id,
+          "desa_id": desa_id,
+          "nama": nama,
+          "email": email,
+          "hp": hp,
+          "address": address,
+        }));
+
+    print(response);
+    return json.decode(response.body);
+  }
+
+  Future<void> deleteDataUserService(int id) async {
+    await getToken();
+    var response = await http.post(
+      Uri.parse('$url/delete/$id'),
+      headers: setHeaders(),
+    );
+
+    var data = json.decode(response.body);
+
+    // return data["message"]);
   }
 }

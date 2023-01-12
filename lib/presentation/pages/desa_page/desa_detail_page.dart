@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sicatu_app/data/datasources/models/desa.dart';
 // import 'package:sicatu_app/presentation/pages/desa_edit_page.dart';
 import 'package:sicatu_app/presentation/pages/desa_page/desa_edit_page.dart';
+import 'package:sicatu_app/presentation/pages/desa_page/desa_view_page.dart';
 
 import '../../../common/constants.dart';
 import '../../controller/desa_controller.dart';
@@ -21,6 +23,7 @@ class DesaDetailPage extends StatefulWidget {
 
 class _DesaDetailPageState extends State<DesaDetailPage> {
   var _desaDetailController = Get.put(DesaController());
+  Desa? desa;
 
   @override
   void initState() {
@@ -31,7 +34,7 @@ class _DesaDetailPageState extends State<DesaDetailPage> {
         } catch (e) {
           _desaDetailController = Get.put(DesaController());
         }
-        await _desaDetailController.getDetailDesa(widget.desa_id);
+        desa = await _desaDetailController.getDetailDesa(widget.desa_id);
       },
     );
     super.initState();
@@ -80,7 +83,18 @@ class _DesaDetailPageState extends State<DesaDetailPage> {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {
-                        Navigator.pop(context, 'Hapus');
+                        _desaDetailController.deleteDesa(widget.desa_id).then(
+                          (value) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return DesaViewPage();
+                                },
+                              ),
+                            );
+                          },
+                        );
                       },
                       child: Text(
                         'Hapus',
@@ -183,7 +197,7 @@ class _DesaDetailPageState extends State<DesaDetailPage> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) {
-                                              return DesaEditPage();
+                                              return DesaEditPage(desa: desa!);
                                             },
                                           ),
                                         );

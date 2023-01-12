@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sicatu_app/data/datasources/models/detail_user.dart';
 import 'package:sicatu_app/data/datasources/models/user.dart';
 import 'package:sicatu_app/presentation/controller/users_controller.dart';
 // import 'package:sicatu_app/presentation/pages/user_edit_profile_page.dart';
 // import 'package:sicatu_app/presentation/pages/user_maps_page.dart';
 import 'package:sicatu_app/presentation/pages/user_page/user_edit_profile_page.dart';
 import 'package:sicatu_app/presentation/pages/user_page/user_maps_page.dart';
+import 'package:sicatu_app/presentation/pages/user_page/user_view_page.dart';
 import 'package:sicatu_app/presentation/service/user_service.dart';
 import 'package:sicatu_app/presentation/widgets/search_loading.dart';
 
@@ -30,6 +32,7 @@ class UserDetailPage extends StatefulWidget {
 
 class _UserDetailPageState extends State<UserDetailPage> {
   int roles_id = 0;
+  UserDetail? user;
 
   var _userDetailController = Get.put(UserDetailController());
 
@@ -42,7 +45,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
         } catch (e) {
           _userDetailController = Get.put(UserDetailController());
         }
-        await _userDetailController.getDetailUser(widget.users_id);
+        user = await _userDetailController.getDetailUser(widget.users_id);
       },
     );
     _loadUserData();
@@ -136,7 +139,8 @@ class _UserDetailPageState extends State<UserDetailPage> {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) {
-                                                    return UserEditProfilePage();
+                                                    return UserEditProfilePage(
+                                                        users: user!);
                                                   },
                                                 ),
                                               );
@@ -350,8 +354,21 @@ class _UserDetailPageState extends State<UserDetailPage> {
                                             actions: <Widget>[
                                               TextButton(
                                                 onPressed: () {
-                                                  Navigator.pop(
-                                                      context, 'Hapus');
+                                                  _userDetailController
+                                                      .deleteUser(
+                                                          widget.users_id)
+                                                      .then(
+                                                    (value) {
+                                                      Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                          builder: (context) {
+                                                            return UserViewPage();
+                                                          },
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
                                                 },
                                                 child: Text(
                                                   'Hapus',
@@ -391,7 +408,7 @@ class _UserDetailPageState extends State<UserDetailPage> {
                                             width: 10,
                                           ),
                                           Text(
-                                            "Delete Shift",
+                                            "Delete User",
                                             style: TextStyle(
                                                 color: Colors.white,
                                                 decoration:

@@ -1,43 +1,49 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 // import 'package:sicatu_app/presentation/pages/user_view_page.dart';
 import 'package:http/http.dart' as http;
+import 'package:sicatu_app/data/datasources/models/Role.dart';
 import 'package:sicatu_app/presentation/pages/user_page/user_view_page.dart';
 
 import '../../../common/constants.dart';
+import '../../../data/datasources/models/desa.dart';
+import '../../controller/user_detail_controller.dart';
+import '../../controller/users_controller.dart';
 // import '../../common/constants.dart';
 
-class UserCreatePage extends StatelessWidget {
-  UserCreatePage({Key? key}) : super(key: key);
+class UserCreatePage extends StatefulWidget {
+  @override
+  State<UserCreatePage> createState() => _UserCreatePageState();
+}
+
+class _UserCreatePageState extends State<UserCreatePage> {
+  // UserCreatePage({Key? key}) : super(key: key);
+  int roles_id = 0;
+  List<Desa>? desa;
+
+  var _userController = Get.put(UserController());
 
   final _formKey = GlobalKey<FormState>();
-  final _idUserTest = 1;
 
-  TextEditingController _namaController = TextEditingController();
-  TextEditingController _desaController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _alamatController = TextEditingController();
-  TextEditingController _roleController = TextEditingController();
-  TextEditingController _nomorhandphoneController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-
-  Future saveNewUser() async {
-    final response = await http
-        .post(Uri.parse('http://192.168.106.1:8000/api/user/store'), body: {
-      // "roles_id": _roleController,
-      // "desa_id": _desaController,
-      "nama": _namaController.text,
-      "email": _emailController.text,
-      "password": _passwordController.text,
-      "address": _alamatController.text,
-    });
-
-    print(response.body);
-    return json.decode(response.body);
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        try {
+          _userController = Get.find<UserController>();
+        } catch (e) {
+          _userController = Get.put(UserController());
+        }
+        desa = await _userController.listDesa;
+      },
+    );
+    super.initState();
   }
 
+  // final _idUserTest = 1;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,6 +60,10 @@ class UserCreatePage extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: IconThemeData(color: biruColor),
+        leading: BackButton(onPressed: () {
+          _userController.resetForm();
+          Get.back();
+        }),
       ),
       body: SafeArea(
         child: Padding(
@@ -97,7 +107,7 @@ class UserCreatePage extends StatelessWidget {
                         height: 8,
                       ),
                       TextFormField(
-                        controller: _namaController,
+                        controller: _userController.namaController,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide:
@@ -137,104 +147,128 @@ class UserCreatePage extends StatelessWidget {
                       SizedBox(
                         height: 8,
                       ),
-                      TextFormField(
-                        controller: _desaController,
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 1, color: abuAbuColor),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
-                            // borderSide: BorderSide.none,
-                          ),
-                          fillColor: softBlueColor,
-                          filled: true,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          hintText: "ex: Pecatu",
-                          hintStyle: TextStyle(
-                            color: placeholderColor,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        style: kSubtitle,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Masukan Data Desa dengan benar";
-                          }
-                          return null;
+                      DropdownButtonFormField(
+                        validator: (value) =>
+                            value == null ? 'Pilih Kecamatan' : null,
+                        isExpanded: true,
+                        value: _userController.selectedIdDesa,
+                        hint: Text("Pilih Desa"),
+                        items: _userController.listDesa
+                            ?.map(
+                              (e) => DropdownMenuItem(
+                                child: Text(e.nama_desa),
+                                value: e.desa_id,
+                              ),
+                            )
+                            .toList(),
+                        onChanged: (e) {
+                          setState(
+                            () {
+                              _userController.selectedIdDesa = e;
+                            },
+                          );
                         },
                       ),
 
+                      // TextFormField(
+                      //   // controller: _userController.desaController,
+                      //   decoration: InputDecoration(
+                      //     enabledBorder: OutlineInputBorder(
+                      //       borderSide:
+                      //           BorderSide(width: 1, color: abuAbuColor),
+                      //     ),
+                      //     border: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(4),
+                      //       // borderSide: BorderSide.none,
+                      //     ),
+                      //     fillColor: softBlueColor,
+                      //     filled: true,
+                      //     contentPadding: EdgeInsets.symmetric(
+                      //       horizontal: 16,
+                      //       vertical: 12,
+                      //     ),
+                      //     hintText: "ex: Pecatu",
+                      //     hintStyle: TextStyle(
+                      //       color: placeholderColor,
+                      //       fontWeight: FontWeight.w500,
+                      //     ),
+                      //   ),
+                      //   style: kSubtitle,
+                      //   validator: (value) {
+                      //     if (value == null || value.isEmpty) {
+                      //       return "Masukan Data Desa dengan benar";
+                      //     }
+                      //     return null;
+                      //   },
+                      // ),
+
                       // Field Jabatan
 
-                      Container(
-                        child: LayoutBuilder(
-                          builder: (context, constraints) {
-                            if (_idUserTest == 2 || _idUserTest == 3) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  SizedBox(
-                                    height: 14,
-                                  ),
-                                  Text(
-                                    'Jabatan',
-                                    style: TextStyle(color: abuAbuColor),
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  TextFormField(
-                                    validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return "Masukan Nomor Handphone dengan benar";
-                                      }
-                                      return null;
-                                    },
-                                    // cursorColor: softBlueColor,
-                                    decoration: InputDecoration(
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            width: 1, color: abuAbuColor),
-                                      ),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                        // borderSide: BorderSide.none,
-                                      ),
-                                      fillColor: softBlueColor,
-                                      filled: true,
-                                      contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 16,
-                                        vertical: 12,
-                                      ),
-                                      hintText: "ex: Kepala Desa",
-                                      hintStyle: TextStyle(
-                                        color: placeholderColor,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                    style: kSubtitle,
-                                    keyboardType: TextInputType.number,
+                      // LayoutBuilder(
+                      //   builder: (context, constraints) {
+                      //     if (_idUserTest == 2 || _idUserTest == 3) {
+                      //       return Column(
+                      //         crossAxisAlignment: CrossAxisAlignment.start,
+                      //         mainAxisSize: MainAxisSize.max,
+                      //         children: <Widget>[
+                      //           SizedBox(
+                      //             height: 14,
+                      //           ),
+                      //           Text(
+                      //             'Jabatan',
+                      //             style: TextStyle(color: abuAbuColor),
+                      //           ),
+                      //           SizedBox(
+                      //             height: 8,
+                      //           ),
+                      //           TextFormField(
+                      //             validator: (value) {
+                      //               if (value == null || value.isEmpty) {
+                      //                 return "Masukan Nomor Handphone dengan benar";
+                      //               }
+                      //               return null;
+                      //             },
+                      //             // cursorColor: softBlueColor,
+                      //             decoration: InputDecoration(
+                      //               enabledBorder: OutlineInputBorder(
+                      //                 borderSide: BorderSide(
+                      //                     width: 1, color: abuAbuColor),
+                      //               ),
+                      //               border: OutlineInputBorder(
+                      //                 borderRadius: BorderRadius.circular(4),
+                      //                 // borderSide: BorderSide.none,
+                      //               ),
+                      //               fillColor: softBlueColor,
+                      //               filled: true,
+                      //               contentPadding: EdgeInsets.symmetric(
+                      //                 horizontal: 16,
+                      //                 vertical: 12,
+                      //               ),
+                      //               hintText: "ex: Kepala Desa",
+                      //               hintStyle: TextStyle(
+                      //                 color: placeholderColor,
+                      //                 fontWeight: FontWeight.w500,
+                      //               ),
+                      //             ),
+                      //             style: kSubtitle,
+                      //             keyboardType: TextInputType.number,
 
-                                    // controller: fullNameController,
-                                  ),
-                                  SizedBox(
-                                    height: 14,
-                                  ),
-                                ],
-                              );
-                            } else {
-                              return SizedBox(
-                                height: 14,
-                              );
-                            }
-                          },
-                        ),
+                      //             // controller: fullNameController,
+                      //           ),
+                      //           SizedBox(
+
+                      //           ),
+                      //         ],
+                      //       );
+                      //     } else {
+                      //       return SizedBox(
+
+                      //       );
+                      //     }
+                      //   },
+                      // ),
+                      SizedBox(
+                        height: 14,
                       ),
 
                       Text(
@@ -246,7 +280,7 @@ class UserCreatePage extends StatelessWidget {
                       ),
                       TextFormField(
                         keyboardType: TextInputType.emailAddress,
-                        controller: _emailController,
+                        controller: _userController.emailController,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide:
@@ -262,7 +296,7 @@ class UserCreatePage extends StatelessWidget {
                             horizontal: 16,
                             vertical: 12,
                           ),
-                          hintText: "ex: debudhiart@gmail.com",
+                          hintText: "ex: nama@instansi.com",
                           hintStyle: TextStyle(
                             color: placeholderColor,
                             fontWeight: FontWeight.w500,
@@ -272,6 +306,8 @@ class UserCreatePage extends StatelessWidget {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Masukan Email dengan benar";
+                          } else if (!value.contains('@')) {
+                            return 'Email tidak valid';
                           }
                           return null;
                         },
@@ -287,7 +323,7 @@ class UserCreatePage extends StatelessWidget {
                         height: 8,
                       ),
                       TextFormField(
-                        controller: _alamatController,
+                        controller: _userController.alamatController,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide:
@@ -329,79 +365,99 @@ class UserCreatePage extends StatelessWidget {
                       SizedBox(
                         height: 8,
                       ),
-                      TextFormField(
-                        controller: _roleController,
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 1, color: abuAbuColor),
+                      DropdownButtonFormField(
+                        validator: (value) =>
+                            value == null ? 'Pilih Kecamatan' : null,
+                        isExpanded: true,
+                        value: _userController.selectedIdRole,
+                        hint: Text("Pilih Role"),
+                        items: DummyRole.map(
+                          (e) => DropdownMenuItem(
+                            child: Text(e.nama_role),
+                            value: e.roles_id,
                           ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
-                            // borderSide: BorderSide.none,
-                          ),
-                          fillColor: softBlueColor,
-                          filled: true,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          hintText: "ex: Role",
-                          hintStyle: TextStyle(
-                            color: placeholderColor,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        style: kSubtitle,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Masukan Role dengan benar";
-                          }
-                          return null;
+                        ).toList(),
+                        onChanged: (e) {
+                          setState(
+                            () {
+                              _userController.selectedIdRole = e;
+                            },
+                          );
                         },
                       ),
-                      SizedBox(
-                        height: 14,
-                      ),
-                      Text(
-                        'Nomor Handphone',
-                        style: TextStyle(color: abuAbuColor),
-                      ),
-                      SizedBox(
-                        height: 8,
-                      ),
-                      TextFormField(
-                        keyboardType: TextInputType.number,
-                        controller: _nomorhandphoneController,
-                        decoration: InputDecoration(
-                          enabledBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(width: 1, color: abuAbuColor),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(4),
-                            // borderSide: BorderSide.none,
-                          ),
-                          fillColor: softBlueColor,
-                          filled: true,
-                          contentPadding: EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
-                          ),
-                          hintText: "ex: 085536553596",
-                          hintStyle: TextStyle(
-                            color: placeholderColor,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        style: kSubtitle,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Masukan Nomor Handphone dengan benar";
-                          }
-                          return null;
-                        },
-                      ),
+                      // TextFormField(
+                      //   controller: _userController.roleController,
+                      //   decoration: InputDecoration(
+                      //     enabledBorder: OutlineInputBorder(
+                      //       borderSide:
+                      //           BorderSide(width: 1, color: abuAbuColor),
+                      //     ),
+                      //     border: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(4),
+                      //       // borderSide: BorderSide.none,
+                      //     ),
+                      //     fillColor: softBlueColor,
+                      //     filled: true,
+                      //     contentPadding: EdgeInsets.symmetric(
+                      //       horizontal: 16,
+                      //       vertical: 12,
+                      //     ),
+                      //     hintText: "ex: Role",
+                      //     hintStyle: TextStyle(
+                      //       color: placeholderColor,
+                      //       fontWeight: FontWeight.w500,
+                      //     ),
+                      //   ),
+                      //   style: kSubtitle,
+                      //   validator: (value) {
+                      //     if (value == null || value.isEmpty) {
+                      //       return "Masukan Role dengan benar";
+                      //     }
+                      //     return null;
+                      //   },
+                      // ),
+                      // SizedBox(
+                      //   height: 14,
+                      // ),
+                      // Text(
+                      //   'Nomor Handphone',
+                      //   style: TextStyle(color: abuAbuColor),
+                      // ),
+                      // SizedBox(
+                      //   height: 8,
+                      // ),
+                      // TextFormField(
+                      //   keyboardType: TextInputType.number,
+                      //   controller: _userController.nomorhandphoneController,
+                      //   decoration: InputDecoration(
+                      //     enabledBorder: OutlineInputBorder(
+                      //       borderSide:
+                      //           BorderSide(width: 1, color: abuAbuColor),
+                      //     ),
+                      //     border: OutlineInputBorder(
+                      //       borderRadius: BorderRadius.circular(4),
+                      //       // borderSide: BorderSide.none,
+                      //     ),
+                      //     fillColor: softBlueColor,
+                      //     filled: true,
+                      //     contentPadding: EdgeInsets.symmetric(
+                      //       horizontal: 16,
+                      //       vertical: 12,
+                      //     ),
+                      //     hintText: "ex: 085536553596",
+                      //     hintStyle: TextStyle(
+                      //       color: placeholderColor,
+                      //       fontWeight: FontWeight.w500,
+                      //     ),
+                      //   ),
+                      //   style: kSubtitle,
+                      //   validator: (value) {
+                      //     if (value == null || value.isEmpty) {
+                      //       return "Masukan Nomor Handphone dengan benar";
+                      //     }
+                      //     return null;
+                      //   },
+                      // ),
                       SizedBox(
                         height: 14,
                       ),
@@ -413,7 +469,7 @@ class UserCreatePage extends StatelessWidget {
                         height: 8,
                       ),
                       TextFormField(
-                        controller: _passwordController,
+                        controller: _userController.passwordController,
                         decoration: InputDecoration(
                           enabledBorder: OutlineInputBorder(
                             borderSide:
@@ -439,6 +495,51 @@ class UserCreatePage extends StatelessWidget {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Masukan Password dengan benar";
+                          } else if (value.length < 8) {
+                            return "Password harus lebih dari 8 karakter";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 14,
+                      ),
+                      Text(
+                        'Password Confirmed',
+                        style: TextStyle(color: abuAbuColor),
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      TextFormField(
+                        controller: _userController.passwordConfirmedController,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(width: 1, color: abuAbuColor),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(4),
+                            // borderSide: BorderSide.none,
+                          ),
+                          fillColor: softBlueColor,
+                          filled: true,
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          hintText: "ex: Password",
+                          hintStyle: TextStyle(
+                            color: placeholderColor,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        style: kSubtitle,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Masukan Password dengan benar";
+                          } else if (value.length < 8) {
+                            return "Password harus lebih dari 8 karakter";
                           }
                           return null;
                         },
@@ -456,7 +557,7 @@ class UserCreatePage extends StatelessWidget {
                           ),
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              saveNewUser().then(
+                              _userController.createUser().then(
                                 (value) {
                                   Navigator.push(
                                     context,
@@ -466,6 +567,7 @@ class UserCreatePage extends StatelessWidget {
                                       },
                                     ),
                                   );
+                                  _userController.resetForm();
 
                                   // Navigator.push(
                                   //   context,
@@ -478,7 +580,7 @@ class UserCreatePage extends StatelessWidget {
                                 },
                               );
                             } else {}
-                            print(_namaController.text);
+                            print(_userController.namaController.text);
                           },
                           child: Text('Save'),
                         ),
@@ -495,7 +597,10 @@ class UserCreatePage extends StatelessWidget {
                             primary: Colors.transparent,
                             minimumSize: Size(318, 44),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.back();
+                            _userController.resetForm();
+                          },
                           child: Text(
                             "Cancel",
                             style: TextStyle(

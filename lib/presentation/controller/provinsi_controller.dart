@@ -31,4 +31,10 @@ class ProvinsiController extends GetxController {
     print(detailProvinsi);
     return detailProvinsi;
   }
+
+  Future<Provinsi?> deleteProvinsi(int id) async {
+    isLoading.value = true;
+    await service.deleteDataProvinsiService(id);
+    isLoading.value = false;
+  }
 }

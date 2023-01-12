@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sicatu_app/data/datasources/models/provinsi.dart';
 import 'package:sicatu_app/presentation/pages/provinsi_page/provinsi_edit_page.dart';
+import 'package:sicatu_app/presentation/pages/provinsi_page/provinsi_view_page.dart';
 
 import '../../../common/constants.dart';
 import '../../controller/provinsi_controller.dart';
@@ -12,6 +13,7 @@ import '../../widgets/search_loading.dart';
 
 class ProvinsiDetailPage extends StatefulWidget {
   //  ProvinsiDetailPage({Key? key}), required this.provinsi : super(key: key);
+
   var provinsi_id;
   ProvinsiDetailPage({required this.provinsi_id});
 
@@ -20,6 +22,7 @@ class ProvinsiDetailPage extends StatefulWidget {
 }
 
 class _ProvinsiDetailPageState extends State<ProvinsiDetailPage> {
+  Provinsi? provinsi;
   var _provinsiDetailController = Get.put(ProvinsiController());
 
   @override
@@ -31,7 +34,8 @@ class _ProvinsiDetailPageState extends State<ProvinsiDetailPage> {
         } catch (e) {
           _provinsiDetailController = Get.put(ProvinsiController());
         }
-        await _provinsiDetailController.getDetailProvinsi(widget.provinsi_id);
+        provinsi = await _provinsiDetailController
+            .getDetailProvinsi(widget.provinsi_id);
       },
     );
     super.initState();
@@ -80,7 +84,30 @@ class _ProvinsiDetailPageState extends State<ProvinsiDetailPage> {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () {
-                        Navigator.pop(context, 'Hapus');
+                        _provinsiDetailController
+                            .deleteProvinsi(widget.provinsi_id)
+                            .then(
+                          (value) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return ProvinsiViewPage();
+                                },
+                              ),
+                            );
+
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //     builder: (context) {
+                            //       return DashBoardPage();
+                            //     },
+                            //   ),
+                            // );
+                          },
+                        );
+                        // Navigator.pop(context, 'Hapus');
                       },
                       child: Text(
                         'Hapus',

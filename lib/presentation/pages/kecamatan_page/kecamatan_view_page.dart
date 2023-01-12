@@ -115,34 +115,35 @@ class _KecamatanViewPageState extends State<KecamatanViewPage> {
                   : ListView.builder(
                       itemCount: controller.listKecamatan?.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return GridView.count(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          crossAxisCount: 2,
-                          childAspectRatio: 3 / 2,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 10,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => KecamatanDetailPage(
-                                        kecamatan_id: controller
-                                            .listKecamatan![index]
-                                            .kecamatan_id),
-                                  ),
-                                );
-                              },
-                              child: CardKecamatan(
-                                kecamatan: controller
-                                        .listKecamatan?[index].nama_kecamatan ??
-                                    "Kecamatan",
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => KecamatanDetailPage(
+                                    kecamatan_id: controller
+                                        .listKecamatan![index].kecamatan_id),
                               ),
-                            ),
-                          ],
+                            );
+                          },
+                          child: CardKecamatan(
+                            kecamatan: controller
+                                    .listKecamatan?[index].nama_kecamatan ??
+                                "Kecamatan",
+                          ),
                         );
+
+                        // GridView.count(
+                        //   physics: NeverScrollableScrollPhysics(),
+                        //   shrinkWrap: true,
+                        //   crossAxisCount: 2,
+                        //   childAspectRatio: 3 / 2,
+                        //   crossAxisSpacing: 12,
+                        //   mainAxisSpacing: 10,
+                        //   children: <Widget>[
+
+                        //   ],
+                        // );
                         // Text(snapshot.data['data'][index]['nama'])
                       },
                     ),
@@ -167,23 +168,26 @@ class CardKecamatan extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(4),
-      child: Card(
-        color: softBlueColor,
-        elevation: 3,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  kecamatan,
-                  style: ktittle,
+    return Container(
+      height: 100,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(4),
+        child: Card(
+          color: softBlueColor,
+          elevation: 3,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    kecamatan,
+                    style: ktittle,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

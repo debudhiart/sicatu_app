@@ -37,6 +37,7 @@ class _UserViewPageState extends State<UserViewPage> {
   // final String url = 'https://covid19.mathdro.id/api';
   Future<void> _pullRefresh() async {
     controller.getUser();
+    controller.getDesa();
   }
 
   @override
@@ -48,6 +49,8 @@ class _UserViewPageState extends State<UserViewPage> {
   _loadUserData() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var user = jsonDecode(localStorage.getString('user') ?? '');
+    await controller.getUser();
+    await controller.getDesa();
 
     if (user != null) {
       setState(() {

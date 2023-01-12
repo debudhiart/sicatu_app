@@ -28,22 +28,25 @@ class _DesaViewPageState extends State<DesaViewPage> {
 
   var _userDetailController = Get.put(UserDetailController());
 
+  // const DesaViewPage({Key? key}) : super(key: key);
+  final controller = Get.put(DesaController());
+
+  Future<void> _pullRefresh() async {
+    controller.getDesa();
+    controller.getKecamatan();
+  }
+
   @override
   void initState() {
     super.initState();
     _loadUserData();
   }
 
-  // const DesaViewPage({Key? key}) : super(key: key);
-  final controller = Get.put(DesaController());
-
-  Future<void> _pullRefresh() async {
-    controller.getDesa();
-  }
-
   _loadUserData() async {
     SharedPreferences localStorage = await SharedPreferences.getInstance();
     var user = jsonDecode(localStorage.getString('user') ?? '');
+    await controller.getDesa();
+    await controller.getKecamatan();
 
     if (user != null) {
       setState(() {
@@ -124,31 +127,32 @@ class _DesaViewPageState extends State<DesaViewPage> {
                   : ListView.builder(
                       itemCount: controller.listDesa?.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return GridView.count(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          crossAxisCount: 2,
-                          childAspectRatio: 3 / 2,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 10,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => DesaDetailPage(
-                                        desa_id: controller
-                                            .listDesa![index].desa_id),
-                                  ),
-                                );
-                              },
-                              child: CardDesa(
-                                  desa: controller.listDesa?[index].nama_desa ??
-                                      "Nama Desa"),
-                            ),
-                          ],
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DesaDetailPage(
+                                    desa_id:
+                                        controller.listDesa![index].desa_id),
+                              ),
+                            );
+                          },
+                          child: CardDesa(
+                              desa: controller.listDesa?[index].nama_desa ??
+                                  "Nama Desa"),
                         );
+                        // GridView.count(
+                        //   physics: NeverScrollableScrollPhysics(),
+                        //   shrinkWrap: true,
+                        //   crossAxisCount: 2,
+                        //   childAspectRatio: 3 / 2,
+                        //   crossAxisSpacing: 12,
+                        //   mainAxisSpacing: 10,
+                        //   children: <Widget>[
+
+                        //   ],
+                        // );
                       },
                     ),
             ),
@@ -174,19 +178,22 @@ class CardDesa extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(4),
-      child: Card(
-        color: softBlueColor,
-        elevation: 3,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                desa,
-                style: ktittle,
-              ),
-            ],
+      child: Container(
+        height: 100,
+        child: Card(
+          color: softBlueColor,
+          elevation: 3,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  desa,
+                  style: ktittle,
+                ),
+              ],
+            ),
           ),
         ),
       ),

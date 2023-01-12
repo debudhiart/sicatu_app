@@ -176,7 +176,7 @@ class EditProfilePage extends StatelessWidget {
                             horizontal: 16,
                             vertical: 12,
                           ),
-                          hintText: "ex: debudhiart@gmail.com",
+                          hintText: "ex: nama@instansi.com",
                           hintStyle: TextStyle(
                             color: placeholderColor,
                             fontWeight: FontWeight.w500,

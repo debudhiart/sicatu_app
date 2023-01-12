@@ -114,36 +114,34 @@ class _KabupatenKotaViewPageState extends State<KabupatenKotaViewPage> {
                   : ListView.builder(
                       itemCount: controller.listKabupatenKota?.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return GridView.count(
-                          physics: NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          crossAxisCount: 2,
-                          childAspectRatio: 3 / 2,
-                          crossAxisSpacing: 12,
-                          mainAxisSpacing: 10,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        KabupatenKotaDetailPage(
-                                            kabupaten_kota_id: controller
-                                                .listKabupatenKota![index]
-                                                .kabupaten_kota_id),
-                                  ),
-                                );
-                              },
-                              child: CardKabupatenKota(
-                                kabupatenKota: controller
-                                        .listKabupatenKota?[index]
-                                        .nama_kabupaten_kota ??
-                                    "Nama Kabupaten",
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => KabupatenKotaDetailPage(
+                                    kabupaten_kota_id: controller
+                                        .listKabupatenKota![index]
+                                        .kabupaten_kota_id),
                               ),
-                            ),
-                          ],
+                            );
+                          },
+                          child: CardKabupatenKota(
+                            kabupatenKota: controller.listKabupatenKota?[index]
+                                    .nama_kabupaten_kota ??
+                                "Nama Kabupaten",
+                          ),
                         );
+
+                        // GridView.count(
+                        //   physics: NeverScrollableScrollPhysics(),
+                        //   shrinkWrap: true,
+                        //   crossAxisCount: 2,
+                        //   childAspectRatio: 3 / 2,
+                        //   crossAxisSpacing: 12,
+                        //   mainAxisSpacing: 10,
+                        //   children: <Widget>[],
+                        // );
                         // Text(snapshot.data['data'][index]['nama'])
                       },
                     ),
@@ -168,23 +166,26 @@ class CardKabupatenKota extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(4),
-      child: Card(
-        color: softBlueColor,
-        elevation: 3,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  kabupatenKota,
-                  style: ktittle,
+    return Container(
+      height: 100,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(4),
+        child: Card(
+          color: softBlueColor,
+          elevation: 3,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    kabupatenKota,
+                    style: ktittle,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

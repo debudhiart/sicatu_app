@@ -15,7 +15,7 @@ class JadwalPetugasEditPage extends StatelessWidget {
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: Text(
-          'Create Jadwal Petugas',
+          'Edit Jadwal Petugas',
           style: GoogleFonts.inter(
             color: hitamColor,
             fontSize: 22,

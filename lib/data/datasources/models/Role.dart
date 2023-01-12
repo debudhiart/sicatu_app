@@ -17,3 +17,10 @@ class Role {
         updated_at: json["updated_at"],
       );
 }
+
+List<Role> DummyRole = [
+  Role(roles_id: 2, nama_role: 'Admin Desa'),
+  Role(roles_id: 3, nama_role: 'Perangkat Desa'),
+  Role(roles_id: 4, nama_role: 'Petugas'),
+  Role(roles_id: 5, nama_role: 'Pelanggan'),
+];

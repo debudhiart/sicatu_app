@@ -323,22 +323,22 @@ class _NavigationDrawerState extends State<NavigationDrawer> {
                           }
                         },
                       ),
-                      ListTile(
-                        onTap: () {
-                          // Navigator.pushNamed(context, AboutPage.ROUTE_NAME);
+                      // ListTile(
+                      //   onTap: () {
+                      //     // Navigator.pushNamed(context, AboutPage.ROUTE_NAME);
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return TemplatePage();
-                              },
-                            ),
-                          );
-                        },
-                        leading: Icon(Icons.pages),
-                        title: Text('Template'),
-                      ),
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (context) {
+                      //           return TemplatePage();
+                      //         },
+                      //       ),
+                      //     );
+                      //   },
+                      //   leading: Icon(Icons.pages),
+                      //   title: Text('Template'),
+                      // ),
                     ],
                   );
                 } else {

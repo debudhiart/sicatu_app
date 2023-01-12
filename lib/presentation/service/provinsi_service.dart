@@ -32,4 +32,16 @@ class ProvinsiService {
 
     return Provinsi.fromJson(data['data']);
   }
+
+  Future<void> deleteDataProvinsiService(int id) async {
+    await getToken();
+    var response = await http.post(
+      Uri.parse('$url/delete/$id'),
+      headers: setHeaders(),
+    );
+
+    var data = json.decode(response.body);
+
+    // return data["message"]);
+  }
 }

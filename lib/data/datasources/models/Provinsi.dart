@@ -7,7 +7,7 @@ class Provinsi {
   });
   int? provinsi_id;
 
-  String? nama_provinsi;
+  String nama_provinsi;
   String? created_at;
   String? updated_at;
 
